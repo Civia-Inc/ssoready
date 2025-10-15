@@ -31,6 +31,23 @@ cp .env app/.env
 echo "✅ Environment files synced"
 echo ""
 
+# Check if services are already running
+if docker compose ps --services --filter "status=running" | grep -q .; then
+    echo "⚠️  Services are already running!"
+    echo ""
+    echo "If you've made changes, you may need to:"
+    echo "  - Code changes (React): Already hot-reloading ✓"
+    echo "  - Code changes (Go): Run 'docker compose up -d --build api auth'"
+    echo "  - .env changes: Run 'docker compose down' first, then re-run this script"
+    echo "  - Dockerfile/compose.yaml: Run 'docker compose down' first, then re-run"
+    echo ""
+    read -p "Continue and attach to logs? (y/N) " -n 1 -r
+    echo ""
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        exit 0
+    fi
+fi
+
 echo "🔧 Starting all services..."
 echo ""
 echo "This will start:"

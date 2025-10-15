@@ -2,6 +2,29 @@
 
 This guide will help you set up and run SSOReady locally for development.
 
+## Quick Start Commands
+
+```bash
+# Initial setup (run once)
+./bin/dev-setup          # Setup environment
+./bin/dev-seed           # Create dev users (optional)
+./bin/dev-start          # Start all services
+
+# Daily development
+./bin/dev-start          # Start services (or attach if running)
+docker compose down      # Stop all services
+
+# After making changes
+docker compose up -d --build api auth    # Rebuild Go services
+docker compose down && ./bin/dev-start   # After .env changes
+docker compose restart <service>         # Quick restart a service
+
+# Troubleshooting
+docker compose ps                        # Check service status
+docker compose logs -f <service>         # View logs
+docker compose down && rm -rf .postgres  # Nuclear reset
+```
+
 ## Prerequisites
 
 Before you begin, ensure you have the following installed:
@@ -213,10 +236,10 @@ Configure where the UIs connect:
 
 ```bash
 # Admin UI
-ADMIN_API_URL=http://localhost:8080
+ADMIN_API_URL=http://localhost:8080/internal/connect
 
 # Self-Serve App UI
-APP_API_URL=http://localhost:8080
+APP_API_URL=http://localhost:8080/internal/connect
 APP_APP_URL=http://localhost:8082
 APP_PUBLIC_API_URL=http://localhost:8080
 ```
@@ -233,39 +256,96 @@ These are optional and can be left empty for local development:
 
 ## Development Workflow
 
-### Modifying Environment Variables
+### Quick Reference: Which Command to Use
 
-To change environment variables:
+| Scenario | Command | Why |
+|----------|---------|-----|
+| **First time setup** | `./bin/dev-setup` | Installs deps, creates .env, runs migrations |
+| **Daily startup** | `./bin/dev-start` | Starts all services (if already running, just attaches) |
+| **After changing .env** | `docker compose down && ./bin/dev-start` | Frontend needs rebuild, backend needs restart |
+| **After code changes (Go)** | `docker compose up -d --build api auth` | Go services need rebuild |
+| **After code changes (React)** | Nothing! | Hot-reload handles it automatically |
+| **After Dockerfile changes** | `docker compose up -d --build <service>` | Container needs rebuild |
+| **After compose.yaml changes** | `docker compose up -d --force-recreate` | Containers need recreation |
+| **Clean slate / reset** | `docker compose down && rm -rf .postgres && ./bin/dev-setup` | Nuclear option |
+| **Services already running?** | `docker compose down` then start again | Stops existing containers first |
 
-1. **Edit the root `.env` file** (not `admin/.env` or `app/.env`)
-2. **Restart services** using `./bin/dev-start` (which auto-syncs) or manually:
+### Common Development Scenarios
+
+#### Scenario 1: Making Code Changes
+
+**Frontend (React) - `admin/` or `app/`:**
+- ✅ **No action needed!** Hot-reload is enabled
+- Changes to `.tsx`, `.ts`, `.css` files automatically refresh
+- Volume mounts ensure your local files are used
+
+**Backend (Go) - `cmd/api/` or `cmd/auth/`:**
+```bash
+# Rebuild the changed service(s)
+docker compose up -d --build api auth
+```
+
+#### Scenario 2: Changing Environment Variables
+
+1. Edit the root `.env` file
+2. Stop and restart:
    ```bash
-   cp .env admin/.env
-   cp .env app/.env
-   docker compose restart app admin
+   docker compose down
+   ./bin/dev-start
    ```
 
-The `./bin/dev-start` script automatically syncs `.env` files before starting, so you don't need to manually copy them.
+**Why?** The `dev-start` script syncs `.env` to subdirectories and frontend containers need to be rebuilt to copy the new `.env` files.
 
-### Making Changes
-
-#### Backend (Go Services)
-
-The Go services (`api` and `auth`) are rebuilt when you restart the containers:
+#### Scenario 3: Modifying Dockerfiles
 
 ```bash
-docker compose up --build api auth
+# Rebuild the affected service
+docker compose up -d --build <service-name>
+
+# Example: After changing app/Dockerfile
+docker compose up -d --build app
 ```
 
-Or rebuild everything:
+#### Scenario 4: Updating compose.yaml
 
 ```bash
-docker compose up --build
+# Recreate containers with new configuration
+docker compose up -d --force-recreate
 ```
 
-#### Frontend (React Apps)
+#### Scenario 5: Services Already Running
 
-The frontend services (`admin` and `app`) have hot-reloading enabled. Changes to files in `admin/src` or `app/src` will automatically refresh the browser.
+If you run `./bin/dev-start` and services are already running, you'll get a warning with options. Either:
+- Press `y` to just attach to logs
+- Press `n` and follow the suggested commands for your changes
+
+#### Scenario 6: Something's Broken - Fresh Start
+
+```bash
+# Stop everything
+docker compose down
+
+# (Optional) Delete database to start completely fresh
+rm -rf .postgres
+
+# Start over
+./bin/dev-setup
+./bin/dev-seed
+./bin/dev-start
+```
+
+### Understanding dev-start Behavior
+
+The `./bin/dev-start` script runs `docker compose up`, which:
+- ✅ Starts services if they're not running
+- ✅ Attaches to logs if services are already running
+- ❌ Does NOT rebuild containers
+- ❌ Does NOT recreate containers
+
+**This means:**
+- Perfect for daily startup when nothing has changed
+- After code/config changes, you may need to rebuild/restart
+- The script now warns you if services are already running and suggests appropriate commands
 
 ### Database Migrations
 
