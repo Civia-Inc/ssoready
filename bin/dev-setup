@@ -53,6 +53,12 @@ else
     echo "✅ .env file already exists"
 fi
 
+# Sync .env to frontend directories (they need local copies for Docker builds)
+echo "  → Syncing .env to admin/ and app/ directories..."
+cp .env admin/.env
+cp .env app/.env
+echo "✅ Environment files synced"
+
 echo ""
 echo "📦 Installing npm dependencies..."
 
@@ -111,5 +117,5 @@ echo "  - API Service:    http://localhost:8080"
 echo "  - Auth Service:   http://localhost:8081"
 echo "  - Admin UI:       http://localhost:8083"
 echo "  - Self-Serve UI:  http://localhost:8082"
-echo "  - PostgreSQL:     localhost:5432"
+echo "  - PostgreSQL:     localhost:5433"
 echo ""

@@ -65,7 +65,7 @@ Once all services are running, you can access:
 | **Self-Serve UI** | http://localhost:8082 | Customer-facing setup interface |
 | **API Service** | http://localhost:8080 | REST API backend |
 | **Auth Service** | http://localhost:8081 | Authentication and SAML handler |
-| **PostgreSQL** | localhost:5432 | Database (user: `postgres`, password: `password`) |
+| **PostgreSQL** | localhost:5433 | Database (user: `postgres`, password: `password`) |
 
 ## Architecture
 
@@ -152,7 +152,15 @@ Our setup uses the same environment variable naming convention as the official S
 - **Backend Go services** expect prefixed variables: `AUTH_*` for auth service, `API_*` for api service
 - **Frontend React apps** expect prefixed variables: `APP_*` for self-serve UI, `ADMIN_*` for admin UI
 
-The `.env` file contains unprefixed base values (e.g., `DATABASE_URL`, `PAGE_ENCODING_VALUE`) which `compose.yaml` maps to the appropriate prefixed environment variables for each service.
+### Environment File Syncing
+
+The root `.env` file is automatically synced to `admin/.env` and `app/.env`:
+- **On setup**: `./bin/dev-setup` creates and syncs all `.env` files
+- **On start**: `./bin/dev-start` syncs before starting services
+
+This ensures consistency - you only need to edit the root `.env` file, and changes will be propagated to the frontend services automatically.
+
+**Why separate files?** Docker build contexts for `admin/` and `app/` can only access files within their own directories, so they need local copies of `.env`.
 
 #### Generated Development Secrets
 
@@ -212,6 +220,20 @@ These are optional and can be left empty for local development:
 - **Microsoft OAuth**: `MICROSOFT_OAUTH_CLIENT_ID`, `MICROSOFT_OAUTH_CLIENT_SECRET`, `MICROSOFT_OAUTH_REDIRECT_URI`
 
 ## Development Workflow
+
+### Modifying Environment Variables
+
+To change environment variables:
+
+1. **Edit the root `.env` file** (not `admin/.env` or `app/.env`)
+2. **Restart services** using `./bin/dev-start` (which auto-syncs) or manually:
+   ```bash
+   cp .env admin/.env
+   cp .env app/.env
+   docker compose restart app admin
+   ```
+
+The `./bin/dev-start` script automatically syncs `.env` files before starting, so you don't need to manually copy them.
 
 ### Making Changes
 
@@ -279,10 +301,12 @@ docker compose exec postgres psql -U postgres
 You can connect using any PostgreSQL client (TablePlus, pgAdmin, DBeaver, etc.):
 
 - **Host**: `localhost`
-- **Port**: `5432`
+- **Port**: `5433`
 - **Database**: `postgres`
 - **User**: `postgres`
 - **Password**: `password`
+
+**Note:** The database is exposed on port **5433** externally to avoid conflicts with any local PostgreSQL installation you may have. Inside Docker, containers communicate on the standard port 5432.
 
 ### Viewing Logs
 
@@ -311,7 +335,7 @@ docker compose logs -f app
    lsof -i :8081  # Auth
    lsof -i :8082  # App
    lsof -i :8083  # Admin
-   lsof -i :5432  # Postgres
+   lsof -i :5433  # Postgres
    ```
 
 2. **Check Docker status:**

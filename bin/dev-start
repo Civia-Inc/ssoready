@@ -24,6 +24,13 @@ if [ ! -d .postgres ]; then
     exit 1
 fi
 
+echo "🔧 Syncing environment files..."
+# Sync root .env to frontend directories to ensure consistency
+cp .env admin/.env
+cp .env app/.env
+echo "✅ Environment files synced"
+echo ""
+
 echo "🔧 Starting all services..."
 echo ""
 echo "This will start:"
