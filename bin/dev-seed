@@ -1,0 +1,106 @@
+#!/bin/bash
+set -e
+
+# Load environment variables
+if [ ! -f .env ]; then
+    echo "❌ .env file not found!"
+    echo ""
+    echo "Please run the setup script first:"
+    echo "  ./bin/dev-setup"
+    exit 1
+fi
+
+source .env
+
+echo "🌱 Seeding development database..."
+echo ""
+
+# Hardcoded list of development users
+# Add more users here as needed
+declare -a USERS=(
+    "gdavis@govai.com|Gareth Davis"
+)
+
+# Create shared app organization
+APP_ORG_ID=$(uuidgen | tr '[:upper:]' '[:lower:]')
+
+echo "Creating app organization..."
+docker compose exec -T postgres psql -U postgres << EOF
+INSERT INTO app_organizations (id)
+VALUES ('$APP_ORG_ID')
+ON CONFLICT DO NOTHING;
+EOF
+
+echo ""
+echo "Creating users..."
+echo ""
+
+# Track session tokens for output
+declare -a SESSION_TOKENS=()
+
+for user_entry in "${USERS[@]}"; do
+    IFS='|' read -r EMAIL DISPLAY_NAME <<< "$user_entry"
+
+    APP_USER_ID=$(uuidgen | tr '[:upper:]' '[:lower:]')
+    SESSION_ID=$(uuidgen | tr '[:upper:]' '[:lower:]')
+
+    # Generate a session token (32 random bytes as hex)
+    SESSION_TOKEN=$(openssl rand -hex 32)
+    SESSION_TOKEN_SHA256=$(echo -n "$SESSION_TOKEN" | xxd -r -p | openssl dgst -sha256 -binary | xxd -p -c 256)
+
+    echo "  → Creating user: $EMAIL ($DISPLAY_NAME)"
+
+    # Insert user and session
+    docker compose exec -T postgres psql -U postgres << EOF > /dev/null
+-- Create app user
+INSERT INTO app_users (id, app_organization_id, display_name, email)
+VALUES ('$APP_USER_ID', '$APP_ORG_ID', '$DISPLAY_NAME', '$EMAIL')
+ON CONFLICT (email) DO UPDATE SET display_name = EXCLUDED.display_name;
+
+-- Create a long-lived session (30 days)
+INSERT INTO app_sessions (id, app_user_id, create_time, expire_time, token, token_sha256, revoked)
+VALUES (
+  '$SESSION_ID',
+  (SELECT id FROM app_users WHERE email = '$EMAIL'),
+  NOW(),
+  NOW() + INTERVAL '30 days',
+  '',
+  decode('$SESSION_TOKEN_SHA256', 'hex'),
+  false
+);
+EOF
+
+    SESSION_TOKENS+=("$EMAIL|$SESSION_TOKEN")
+done
+
+echo ""
+echo "✅ Database seeded successfully!"
+echo ""
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "Development Users Created"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+
+for token_entry in "${SESSION_TOKENS[@]}"; do
+    IFS='|' read -r EMAIL SESSION_TOKEN <<< "$token_entry"
+    echo "User: $EMAIL"
+    echo "Token: $SESSION_TOKEN"
+    echo ""
+done
+
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "How to Log In:"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+echo "1. Visit http://localhost:8082"
+echo "2. Open your browser's Developer Tools (F12)"
+echo "3. Go to Console tab"
+echo "4. Run this command (paste your token):"
+echo ""
+echo "   localStorage.setItem('s', 'YOUR_TOKEN_HERE')"
+echo ""
+echo "5. Refresh the page - you'll be logged in!"
+echo ""
+echo "Sessions expire in 30 days."
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""

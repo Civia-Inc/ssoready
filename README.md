@@ -79,7 +79,8 @@ To run SSOReady locally for development or testing:
 
 1. Clone this repository
 2. Run `./bin/dev-setup` to set up your environment
-3. Run `./bin/dev-start` to start all services
+3. Run `./bin/dev-seed` to create development user accounts (optional)
+4. Run `./bin/dev-start` to start all services
 
 See [DEVELOPMENT.md](./DEVELOPMENT.md) for complete setup instructions, architecture details, and troubleshooting guides.
 

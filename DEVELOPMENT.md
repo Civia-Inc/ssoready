@@ -55,6 +55,18 @@ To run in the background:
 docker compose up -d
 ```
 
+### 4. (Optional) Seed Development Users
+
+To create predefined development user accounts:
+
+```bash
+./bin/dev-seed
+```
+
+This creates user accounts for all developers defined in the script and generates session tokens. See the "Logging In" section below for how to use them.
+
+To add more users, edit `bin/dev-seed` and add entries to the `USERS` array.
+
 ## Service URLs
 
 Once all services are running, you can access:
@@ -401,6 +413,33 @@ docker compose build --no-cache
 # Or rebuild specific services
 docker compose build --no-cache api auth
 ```
+
+## Logging In
+
+### Without OAuth Configured (Development)
+
+Since email/Google/Microsoft OAuth are optional for local dev, you can use the seed script to create users:
+
+```bash
+./bin/dev-seed
+```
+
+This will output session tokens for all predefined users. To use a session token:
+
+1. Visit http://localhost:8082
+2. Open your browser's Developer Tools (F12)
+3. Go to the **Console** tab
+4. Run this command (replace with your actual token):
+   ```javascript
+   localStorage.setItem('s', 'YOUR_TOKEN_HERE')
+   ```
+5. Refresh the page - you'll be logged in!
+
+The session lasts 30 days. The token is stored in localStorage with key `s`.
+
+### With OAuth Configured
+
+If you configure Google or Microsoft OAuth (see "Optional Configuration" above), you can log in normally through the UI.
 
 ## Testing SAML/SCIM
 
