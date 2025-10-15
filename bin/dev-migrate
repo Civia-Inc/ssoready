@@ -1,0 +1,17 @@
+#!/bin/bash
+set -e
+
+# Load environment variables
+if [ ! -f .env ]; then
+    echo "❌ .env file not found!"
+    echo ""
+    echo "Please run the setup script first:"
+    echo "  ./bin/dev-setup"
+    exit 1
+fi
+
+source .env
+
+echo "🗄️  Running database migrations..."
+docker compose run --rm migrate -d "$DATABASE_URL" up
+echo "✅ Migrations complete"

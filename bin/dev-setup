@@ -1,0 +1,115 @@
+#!/bin/bash
+set -e
+
+echo "🚀 SSOReady Local Development Setup"
+echo "===================================="
+echo ""
+
+# Check for required tools
+echo "📋 Checking prerequisites..."
+
+if ! command -v docker &> /dev/null; then
+    echo "❌ Docker is not installed. Please install Docker Desktop from https://www.docker.com/products/docker-desktop"
+    exit 1
+fi
+echo "✅ Docker is installed"
+
+if ! docker compose version &> /dev/null; then
+    echo "❌ docker compose is not available. Please install Docker Desktop or Docker with Compose plugin"
+    exit 1
+fi
+echo "✅ docker compose is installed"
+
+if ! command -v node &> /dev/null; then
+    echo "❌ Node.js is not installed. Please install Node.js 18+ from https://nodejs.org/"
+    exit 1
+fi
+NODE_VERSION=$(node -v | cut -d'v' -f2 | cut -d'.' -f1)
+if [ "$NODE_VERSION" -lt 18 ]; then
+    echo "❌ Node.js version $NODE_VERSION is too old. Please install Node.js 18 or higher."
+    exit 1
+fi
+echo "✅ Node.js $(node -v) is installed"
+
+if ! command -v go &> /dev/null; then
+    echo "❌ Go is not installed. Please install Go 1.21+ from https://golang.org/dl/"
+    exit 1
+fi
+echo "✅ Go $(go version | awk '{print $3}') is installed"
+
+echo ""
+echo "📄 Setting up environment variables..."
+
+# Create .env file if it doesn't exist
+if [ ! -f .env ]; then
+    if [ -f .env.example ]; then
+        cp .env.example .env
+        echo "✅ Created .env file from .env.example"
+    else
+        echo "❌ .env.example file not found!"
+        exit 1
+    fi
+else
+    echo "✅ .env file already exists"
+fi
+
+echo ""
+echo "📦 Installing npm dependencies..."
+
+echo "  → Installing admin dependencies..."
+cd admin
+npm ci
+cd ..
+
+echo "  → Installing app dependencies..."
+cd app
+npm ci
+cd ..
+
+echo "✅ npm dependencies installed"
+
+echo ""
+echo "🐘 Starting PostgreSQL..."
+
+# Start only postgres
+docker compose up -d postgres
+
+# Wait for postgres to be healthy
+echo "  → Waiting for PostgreSQL to be ready..."
+for i in {1..30}; do
+    if docker compose exec -T postgres pg_isready -U postgres > /dev/null 2>&1; then
+        echo "✅ PostgreSQL is ready"
+        break
+    fi
+    if [ $i -eq 30 ]; then
+        echo "❌ PostgreSQL failed to start within 30 seconds"
+        exit 1
+    fi
+    sleep 1
+done
+
+echo ""
+echo "🗄️  Running database migrations..."
+
+# Load .env and run migrations
+source .env
+docker compose run --rm migrate -d "$DATABASE_URL" up
+
+echo "✅ Database migrations complete"
+
+echo ""
+echo "✨ Setup complete!"
+echo ""
+echo "To start all services, run:"
+echo "  ./bin/dev-start"
+echo ""
+echo "Or with docker compose directly:"
+echo "  docker compose up"
+echo ""
+echo "Services will be available at:"
+echo "  - API Service:    http://localhost:8080"
+echo "  - Auth Service:   http://localhost:8081"
+echo "  - Admin UI:       http://localhost:8083"
+echo "  - Self-Serve UI:  http://localhost:8082"
+echo "  - PostgreSQL:     localhost:5432"
+echo ""

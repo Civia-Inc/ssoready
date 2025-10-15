@@ -1,0 +1,46 @@
+#!/bin/bash
+set -e
+
+echo "🚀 Starting SSOReady Development Environment"
+echo "============================================="
+echo ""
+
+# Check if .env exists
+if [ ! -f .env ]; then
+    echo "❌ .env file not found!"
+    echo ""
+    echo "Please run the setup script first:"
+    echo "  ./bin/dev-setup"
+    exit 1
+fi
+
+# Check if postgres data directory exists
+if [ ! -d .postgres ]; then
+    echo "⚠️  PostgreSQL data directory not found."
+    echo ""
+    echo "It looks like this is your first time running SSOReady."
+    echo "Please run the setup script first:"
+    echo "  ./bin/dev-setup"
+    exit 1
+fi
+
+echo "🔧 Starting all services..."
+echo ""
+echo "This will start:"
+echo "  - PostgreSQL database"
+echo "  - API service (Go)"
+echo "  - Auth service (Go)"
+echo "  - Admin UI (React)"
+echo "  - Self-Serve UI (React)"
+echo ""
+echo "Press Ctrl+C to stop all services"
+echo ""
+
+# Give it a moment for the message to be read
+sleep 2
+
+# Start all services
+docker compose up
+
+echo ""
+echo "👋 All services stopped"
