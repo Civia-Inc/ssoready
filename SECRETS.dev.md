@@ -1,0 +1,52 @@
+# Development Secrets Summary
+
+**⚠️ FOR LOCAL DEVELOPMENT ONLY - DO NOT USE IN PRODUCTION**
+
+These secrets were automatically generated during local setup. They are safe to commit to your fork for development purposes, but should **never** be used in production deployments.
+
+## Generated Secret Keys
+
+### PAGE_ENCODING_VALUE
+Used for encoding pagination tokens.
+
+```
+4288e9ce63df47bf0dfc5098787c94bfca2e8dd1f3b9ec7244e168a3f711e958
+```
+
+### SAML_STATE_SIGNING_KEY
+Used for signing SAML state parameters.
+
+```
+f94052c6011652ead62004b533e80604a3717190565bb5cd85f19a7c67b83cd0
+```
+
+### OAUTH_ID_TOKEN_PRIVATE_KEY_BASE64
+Base64-encoded PKCS#8 RSA private key for signing OAuth ID tokens.
+
+```
+LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCk1JSUV2QUlCQURBTkJna3Foa2lHOXcwQkFRRUZBQVNDQktZd2dnU2lBZ0VBQW9JQkFRQzhWOCtlMmY1Mmo1WHkKdUtybXlRT3J4NmhqVmhEODJpMkNIeG1xSjFCOGlWZzhvQ0pHRERtZWxrWXM0Qnd6d045WUZFQzBsY1Znczl5LwpCd1BoY2pRRXNGelVGY3M4YnJLSkp2Snl5NzRIeWppWEUzdVdIWHZ5ZFVKVFZXbmhiZW01VFppNlVoSlhHcFlqCksxcjQxV0pNWi9uSFNEZ2FpSG5DOHpWajROTTl1enR2SkFkS1RLV1JMYnNrWkJFZ0hIcUhNMWlBOEVBTVROTEIKWVhBaVRlQTdPOC9WQW1RdEx6VHlLMEoxMGI0bTFYV3ZZeVlHRXZIZVhpMnA0VEJvSElQRDBzZUVYQVh1Q3B6UwpScE5sWnR1T3hoK3JCVVM5MnhoanFYQUF5SVB3TUxBMFNwOEZCQjB0WGxDRFJuR1FXWnVXM3k1SjYramJGZEZqCkRhWHNiTEZIQWdNQkFBRUNnZ0VBRVphQnBPdm1mMXZaUE5sUjNFdFpOR2xvcUI0WmFBTlh6SmJxNXFEVk8wdjQKR1hFNndoL1NJYVVXMkluMUdFQWlteThJKzlRZ29tOHBaZzFacDJ2cXY2VlloZFdqTFBtSllwVm9mcC9ZRnhJagpScmhqQ2htbXdYV0J4Qlp0MU1kVzFCOFM3Qk5OOHlSZ2NOaFRubmtPdk9QWXgydFBFZXM4czUvU2xJa2lNTmxwCjJBZHVXWWphRVl0SFlQNG1TKy9MNFhuYjZHd3NxRHVVOVRuQ2JoV0tDVVFUK2pFVnFPaXh2cXk5OGk5aGQxZ1IKa3Y4VjVXdytWSkh6ai85aW1YTUpQVmlNazA3cXo4RFppdjlJU1MxUkowUzNTczhmNXBwaEdwWEovbDVPdW1aVwp6UktUWnVtMTdLTTJnVzdvMUJwME5tZzJZYmNtaDhYWjVuTGoyenJYd1FLQmdRRDRpMjV1NzdDakNCcmlISVZkCmNER0gzZ1oxMkl4aWU3TlRaOFVQSDF2Zmg1dDJmZUY3UFBPaVM1TWF4RVNrQzl5aFRzdlV5MHovY2hXUU5oOVQKdHd1SWNzeVIzRXdrU3VWNGJtQXlTYndqSVRGZ25Wam5UYTZsQi91SUFabEo0RFRUMm5GbTYxTDhpRUtHZUk4bAovdjROZXRRMU13RDNNdm1mMlN1N1dlV3NyUUtCZ1FEQi9oZTJibUw0WldESHlRK1cwaUdBZnNWQm1hbVh4bmQ3ClRQSzdDVTRHR3h2eVYrdTFVZ1EvQkZ0a1R2R3RFTjVheGt0UkNuN1lueU1oT0JGbDIvL05kR3ZjSldmNGNzMi8KS3ZuOFhLLzZLUkdnbnZrNERiR21XYmZCQVM0Q2U0YXZzM2w5K2x0QjErMGtpUHZOU0VUSlRnM0kwaFhFaG5aNQorY2xrSUNLQVF3S0JnQ0w2UkYxYVlBcGhqcDc1a284MnhkR3dIa3FoWWdoT0RrdVRrL2p2MmRjWVYzbVNkNVFIClhPWWZLcUdlczJZK3dScjJZdHNjalVaNXdLMGQ0TVRBUXVBOS82b2JUWi9oNW05UFlUeFNnaWFUZWtaMWZsaDIKNXpnVWFvS1did01saVdtekdUaDVyNkVZYi94S3BTS2N3eFlVamg2NmdjMUlJRGN0c2VqWTJ1aTFBb0dBUklFZApFSkFrcFFEdnp6MUNJd2xyU1R2N0huSk1BRXZXajVVWnRsRFAyN29oQVZCbzdTdmNVZ0NRNFhnN1FkbE9IQklnCk1Lc2JKaFgwU3R2STBRYUNhNlFzSHA2YSs1Slc4NllTaHpxWDdpZ29rR2J6TFFjdzc4U0k3a0FqWmo4R3plNzcKL1MrMm9DYkhHSHJES0xmWGlwcmtwVUVDN05acTZpSDZLMEJwem84Q2dZQUk1VGlHUkZ1NjNZYmZiUjJESGc2awp3dEIxbnJDajJVdmp6ZVN5aTZ6LzJKeTlTcmNMdVRURlFTMzYrK1ljMExmVnB0ZmZtOEFhcXF6czJZVVpvUXZwCjJETUtDdFBWK0JRZmVIdWxjVjhpREc5ekszcnlaZDlYUmxRSXVvSUE1ZTR5QXEzc0FHd2JzSGN3SE5oaGZ4aTcKODQ3VmdqeVBvTjEzVHg2V2M0RC81Zz09Ci0tLS0tRU5EIFBSSVZBVEUgS0VZLS0tLS0K
+```
+
+**Note:** This key is in PKCS#8 format, which is required by the auth service.
+
+## Regenerating Secrets
+
+If you need to generate new secrets for any reason:
+
+```bash
+# Generate 64-character hex strings (for PAGE_ENCODING_VALUE and SAML_STATE_SIGNING_KEY)
+openssl rand -hex 32
+
+# Generate PKCS#8 RSA private key (base64 encoded) for OAUTH_ID_TOKEN_PRIVATE_KEY_BASE64
+openssl genrsa 2048 2>/dev/null | openssl pkcs8 -topk8 -nocrypt -outform PEM 2>/dev/null | base64 | tr -d '\n'
+```
+
+Then update your `.env` file with the new values.
+
+**Important:** The RSA key must be in PKCS#8 format (use the `pkcs8` command as shown above). The older RSA format will cause the auth service to crash.
+
+## Production Deployment
+
+For production deployments, you **must** generate new, secure secrets. Never use these development secrets in any production or staging environment.
+
+See the [SSOReady self-hosting guide](https://ssoready.com/docs/self-hosting-ssoready) for production deployment instructions.

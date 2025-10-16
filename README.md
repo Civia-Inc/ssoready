@@ -52,12 +52,12 @@ straightforward** way to add SAML and SCIM support to your product:
   * [SSOReady-Ruby](https://github.com/ssoready/ssoready-ruby)
   * [SSOReady-PHP](https://github.com/ssoready/ssoready-php)
 * SSOReady is just an authentication middleware layer. SSOReady doesn’t "own" your users or require any changes to your users database.
-* You can use our cloud-hosted instance or [self-host yourself](https://ssoready.com/docs/self-hosting-ssoready), with the Enterprise plan giving you SLA'd support either way. 
+* You can use our cloud-hosted instance or [self-host yourself](https://ssoready.com/docs/self-hosting-ssoready), with the Enterprise plan giving you SLA'd support either way.
 
 **SSOReady can be extended with these products, available on the [Enterprise plan](https://ssoready.com/pricing):**
 
 * [Custom Domains & Branding](https://ssoready.com/docs/ssoready-concepts/environments#custom-domains): Run
-  SSOReady on a domain you control, and make your entire SAML/SCIM experience on-brand. 
+  SSOReady on a domain you control, and make your entire SAML/SCIM experience on-brand.
 * [Management API](https://ssoready.com/docs/management-api): Completely automate everything about SAML
   and SCIM programmatically at scale.
 * [Enterprise Support](https://ssoready.com/pricing): SLA'd support, including for self-hosted deployments.
@@ -72,6 +72,17 @@ what you want to add support for:
 
 Most folks implement SAML and SCIM in an afternoon. It only takes two lines of
 code.
+
+## Local development
+
+To run SSOReady locally for development or testing:
+
+1. Clone this repository
+2. Run `./bin/dev-setup` to set up your environment
+3. Run `./bin/dev-seed` to create development user accounts (optional)
+4. Run `./bin/dev-start` to start all services
+
+See [DEVELOPMENT.md](./DEVELOPMENT.md) for complete setup instructions, architecture details, and troubleshooting guides.
 
 ## How SSOReady works
 

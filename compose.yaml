@@ -1,0 +1,98 @@
+services:
+  postgres:
+    image: postgres:15.3
+    environment:
+      POSTGRES_PASSWORD: "password"
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./.postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  migrate:
+    profiles: ["tools"]
+    build:
+      context: .
+      dockerfile: cmd/migrate/Dockerfile
+    command: ["-d", "${DATABASE_URL}", "up"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+
+  api:
+    build:
+      context: .
+      dockerfile: cmd/api/Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - API_SERVE_ADDR=0.0.0.0:8080
+      - API_DB=${DATABASE_URL}
+      - API_DEFAULT_AUTH_URL=${DEFAULT_AUTH_URL}
+      - API_DEFAULT_ADMIN_SETUP_URL=${DEFAULT_ADMIN_SETUP_URL}
+      - API_PAGE_ENCODING_VALUE=${PAGE_ENCODING_VALUE}
+      - API_SAML_STATE_SIGNING_KEY=${SAML_STATE_SIGNING_KEY}
+      - API_SENTRY_DSN=${SENTRY_DSN:-}
+      - API_SENTRY_ENVIRONMENT=${SENTRY_ENVIRONMENT:-development}
+      - API_GOOGLE_OAUTH_CLIENT_ID=${GOOGLE_OAUTH_CLIENT_ID:-}
+      - API_MICROSOFT_OAUTH_CLIENT_ID=${MICROSOFT_OAUTH_CLIENT_ID:-}
+      - API_MICROSOFT_OAUTH_CLIENT_SECRET=${MICROSOFT_OAUTH_CLIENT_SECRET:-}
+      - API_MICROSOFT_OAUTH_REDIRECT_URI=${MICROSOFT_OAUTH_REDIRECT_URI:-}
+
+  auth:
+    build:
+      context: .
+      dockerfile: cmd/auth/Dockerfile
+    ports:
+      - "8081:8081"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - AUTH_SERVE_ADDR=0.0.0.0:8081
+      - AUTH_DB=${DATABASE_URL}
+      - AUTH_DEFAULT_AUTH_URL=${DEFAULT_AUTH_URL}
+      - AUTH_DEFAULT_ADMIN_TEST_MODE_URL=${DEFAULT_ADMIN_TEST_MODE_URL}
+      - AUTH_BASE_URL=${BASE_URL}
+      - AUTH_PAGE_ENCODING_VALUE=${PAGE_ENCODING_VALUE}
+      - AUTH_SAML_STATE_SIGNING_KEY=${SAML_STATE_SIGNING_KEY}
+      - AUTH_OAUTH_ID_TOKEN_PRIVATE_KEY_BASE64=${OAUTH_ID_TOKEN_PRIVATE_KEY_BASE64}
+      - AUTH_SENTRY_DSN=${SENTRY_DSN:-}
+      - AUTH_SENTRY_ENVIRONMENT=${SENTRY_ENVIRONMENT:-development}
+
+  admin:
+    build:
+      context: ./admin
+      dockerfile: Dockerfile
+      target: development
+    ports:
+      - "8083:8083"
+    volumes:
+      - ./admin/src:/app/src
+      - ./admin/public:/app/public
+    depends_on:
+      - api
+    command: npm run dev
+
+  app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+      target: development
+    ports:
+      - "8082:8082"
+    volumes:
+      - ./app/src:/app/src
+      - ./app/public:/app/public
+    depends_on:
+      - api
+    command: npm run dev
