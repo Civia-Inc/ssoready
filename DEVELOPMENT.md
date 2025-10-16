@@ -496,9 +496,51 @@ docker compose build --no-cache api auth
 
 ## Logging In
 
-### Without OAuth Configured (Development)
+### Recommended: Google OAuth
 
-Since email/Google/Microsoft OAuth are optional for local dev, you can use the seed script to create users:
+Google OAuth works perfectly with localhost for development (no special setup needed).
+
+#### Setup Google OAuth
+
+1. **Create a Google Cloud Project**
+   - Visit [Google Cloud Console](https://console.cloud.google.com)
+   - Create a new project or select an existing one
+
+2. **Enable Google+ API**
+   - Go to "APIs & Services" → "Library"
+   - Search for "Google+ API" and enable it
+
+3. **Create OAuth 2.0 Credentials**
+   - Go to "APIs & Services" → "Credentials"
+   - Click "Create Credentials" → "OAuth client ID"
+   - Application type: "Web application"
+   - Add authorized JavaScript origins: `http://localhost:8082`
+   - Add authorized redirect URIs: `http://localhost:8082`
+   - Copy the generated Client ID
+
+4. **Configure Your Environment**
+
+   Add to your `.env` file:
+   ```bash
+   APP_GOOGLE_OAUTH_CLIENT_ID=your-client-id-here.apps.googleusercontent.com
+   ```
+
+5. **Rebuild the App Container**
+   ```bash
+   docker compose build app
+   docker compose up -d app
+   ```
+
+#### Login with OAuth
+
+1. Visit http://localhost:8082
+2. Click "Continue with Google"
+3. Sign in with your Google account
+4. You're automatically logged in!
+
+### Alternative: Direct Token Login (Without OAuth)
+
+If OAuth isn't configured, you can use the seed script to create users with session tokens:
 
 ```bash
 ./bin/dev-seed
@@ -516,10 +558,6 @@ This will output session tokens for all predefined users. To use a session token
 5. Refresh the page - you'll be logged in!
 
 The session lasts 30 days. The token is stored in localStorage with key `s`.
-
-### With OAuth Configured
-
-If you configure Google or Microsoft OAuth (see "Optional Configuration" above), you can log in normally through the UI.
 
 ## Testing SAML/SCIM
 
