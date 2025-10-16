@@ -74,33 +74,124 @@ EOF
 done
 
 echo ""
+echo "Creating test environment and organization..."
+
+# Create a test environment
+ENV_ID=$(uuidgen | tr '[:upper:]' '[:lower:]')
+ORG_ID=$(uuidgen | tr '[:upper:]' '[:lower:]')
+
+docker compose exec -T postgres psql -U postgres << EOF > /dev/null
+-- Create environment
+INSERT INTO environments (
+  id,
+  app_organization_id,
+  display_name,
+  auth_url,
+  redirect_url
+)
+VALUES (
+  '$ENV_ID',
+  '$APP_ORG_ID',
+  'Development Environment',
+  'http://localhost:8081',
+  'http://localhost:3000/ssoready-callback'
+)
+ON CONFLICT DO NOTHING;
+
+-- Create organization within the environment
+INSERT INTO organizations (
+  id,
+  environment_id,
+  display_name,
+  external_id
+)
+VALUES (
+  '$ORG_ID',
+  '$ENV_ID',
+  'GovAI Microsoft',
+  '13246'
+)
+ON CONFLICT DO NOTHING;
+EOF
+
+echo "  → Environment ID: env_$(echo $ENV_ID | tr -d '-')"
+echo "  → Organization ID: org_$(echo $ORG_ID | tr -d '-')"
+
+# Create admin access token for the test organization
+ADMIN_TOKEN_ID=$(uuidgen | tr '[:upper:]' '[:lower:]')
+ADMIN_TOKEN=$(openssl rand -hex 32)
+ADMIN_TOKEN_SHA256=$(echo -n "$ADMIN_TOKEN" | xxd -r -p | openssl dgst -sha256 -binary | xxd -p -c 256)
+
+echo ""
+echo "Creating admin access token..."
+
+docker compose exec -T postgres psql -U postgres << EOF > /dev/null
+-- Create admin access token
+INSERT INTO admin_access_tokens (
+  id,
+  organization_id,
+  access_token_sha256,
+  create_time,
+  expire_time,
+  can_manage_saml,
+  can_manage_scim
+)
+VALUES (
+  '$ADMIN_TOKEN_ID',
+  '$ORG_ID',
+  decode('$ADMIN_TOKEN_SHA256', 'hex'),
+  NOW(),
+  NOW() + INTERVAL '30 days',
+  true,
+  true
+)
+ON CONFLICT DO NOTHING;
+EOF
+
+echo "  → Admin token created"
+
+echo ""
 echo "✅ Database seeded successfully!"
 echo ""
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "Development Users Created"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "                        DEVELOPMENT TOKENS                         "
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+echo "📱 APP SESSION TOKENS (for SaaS Developer UI)"
+echo "   Use these to log into http://localhost:8082"
 echo ""
 
 for token_entry in "${SESSION_TOKENS[@]}"; do
     IFS='|' read -r EMAIL SESSION_TOKEN <<< "$token_entry"
-    echo "User: $EMAIL"
-    echo "Token: $SESSION_TOKEN"
+    echo "   User:  $EMAIL"
+    echo "   Token: $SESSION_TOKEN"
     echo ""
 done
 
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "How to Log In:"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
-echo "1. Visit http://localhost:8082"
-echo "2. Open your browser's Developer Tools (F12)"
-echo "3. Go to Console tab"
-echo "4. Run this command (paste your token):"
+echo "🔧 ADMIN ACCESS TOKEN (for Customer Self-Service UI)"
+echo "   Use this to log into http://localhost:8083"
 echo ""
-echo "   localStorage.setItem('s', 'YOUR_TOKEN_HERE')"
+echo "   Organization: Test Customer Organization"
+echo "   Token:        $ADMIN_TOKEN"
 echo ""
-echo "5. Refresh the page - you'll be logged in!"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
-echo "Sessions expire in 30 days."
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "HOW TO LOG IN:"
+echo ""
+echo "For App UI (port 8082) - Developer experience:"
+echo "  1. Visit http://localhost:8082"
+echo "  2. Open Developer Tools (F12) → Console"
+echo "  3. Run: localStorage.setItem('s', 'YOUR_APP_TOKEN_HERE')"
+echo "  4. Refresh the page"
+echo ""
+echo "For Admin UI (port 8083) - Customer experience:"
+echo "  1. Visit http://localhost:8083"
+echo "  2. Open Developer Tools (F12) → Console"
+echo "  3. Run: localStorage.setItem('s', 'YOUR_ADMIN_TOKEN_HERE')"
+echo "  4. Refresh the page"
+echo ""
+echo "All sessions expire in 30 days."
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
