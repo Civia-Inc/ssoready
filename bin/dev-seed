@@ -94,7 +94,7 @@ VALUES (
   '$APP_ORG_ID',
   'Development Environment',
   'http://localhost:8081',
-  'http://localhost:3000/ssoready-callback'
+  'https://civia-app.us-1.sharedwithexpose.com/sso_callback'
 )
 ON CONFLICT DO NOTHING;
 
@@ -110,6 +110,19 @@ VALUES (
   '$ENV_ID',
   'GovAI Microsoft',
   '13246'
+)
+ON CONFLICT DO NOTHING;
+
+-- Add domain to the organization
+INSERT INTO organization_domains (
+  id,
+  organization_id,
+  domain
+)
+VALUES (
+  gen_random_uuid(),
+  '$ORG_ID',
+  'usegovai.onmicrosoft.com'
 )
 ON CONFLICT DO NOTHING;
 EOF
