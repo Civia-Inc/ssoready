@@ -37,20 +37,20 @@ jobs:
           docker buildx build --platform linux/arm64 . -f ./cmd/$SERVICE/Dockerfile -t $ECR_REGISTRY_URL/$SERVICE:$TAG
           docker push $ECR_REGISTRY_URL/$SERVICE:$TAG
 
-      - name: Create ECS task definition
-        id: task-def
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
-        with:
-          task-definition: cmd/${{ env.SERVICE }}/task-definition-${{ env.DEPLOYMENT_ENVIRONMENT }}.json
-          container-name: ${{ env.SERVICE }}
-          image: ${{ env.ECR_REGISTRY_URL }}/${{ env.SERVICE }}:${{ env.TAG }}
+      # - name: Create ECS task definition
+      #   id: task-def
+      #   uses: aws-actions/amazon-ecs-render-task-definition@v1
+      #   with:
+      #     task-definition: cmd/${{ env.SERVICE }}/task-definition-${{ env.DEPLOYMENT_ENVIRONMENT }}.json
+      #     container-name: ${{ env.SERVICE }}
+      #     image: ${{ env.ECR_REGISTRY_URL }}/${{ env.SERVICE }}:${{ env.TAG }}
 
-      - name: Deploy ECS service
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-        with:
-          task-definition: ${{ steps.task-def.outputs.task-definition }}
-          service: ${{ env.SERVICE }}
-          cluster: ${{ env.ECS_CLUSTER }}
+      # - name: Deploy ECS service
+      #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      #   with:
+      #     task-definition: ${{ steps.task-def.outputs.task-definition }}
+      #     service: ${{ env.SERVICE }}
+      #     cluster: ${{ env.ECS_CLUSTER }}
 
   deploy-auth:
     name: Deploy auth
@@ -80,17 +80,17 @@ jobs:
           docker buildx build --platform linux/arm64 . -f ./cmd/$SERVICE/Dockerfile -t $ECR_REGISTRY_URL/$SERVICE:$TAG
           docker push $ECR_REGISTRY_URL/$SERVICE:$TAG
 
-      - name: Create ECS task definition
-        id: task-def
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
-        with:
-          task-definition: cmd/${{ env.SERVICE }}/task-definition-${{ env.DEPLOYMENT_ENVIRONMENT }}.json
-          container-name: ${{ env.SERVICE }}
-          image: ${{ env.ECR_REGISTRY_URL }}/${{ env.SERVICE }}:${{ env.TAG }}
+      # - name: Create ECS task definition
+      #   id: task-def
+      #   uses: aws-actions/amazon-ecs-render-task-definition@v1
+      #   with:
+      #     task-definition: cmd/${{ env.SERVICE }}/task-definition-${{ env.DEPLOYMENT_ENVIRONMENT }}.json
+      #     container-name: ${{ env.SERVICE }}
+      #     image: ${{ env.ECR_REGISTRY_URL }}/${{ env.SERVICE }}:${{ env.TAG }}
 
-      - name: Deploy ECS service
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-        with:
-          task-definition: ${{ steps.task-def.outputs.task-definition }}
-          service: ${{ env.SERVICE }}
-          cluster: ${{ env.ECS_CLUSTER }}
+      # - name: Deploy ECS service
+      #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      #   with:
+      #     task-definition: ${{ steps.task-def.outputs.task-definition }}
+      #     service: ${{ env.SERVICE }}
+      #     cluster: ${{ env.ECS_CLUSTER }}
