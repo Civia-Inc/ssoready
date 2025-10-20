@@ -7,10 +7,6 @@ case $1 in
     dsn='postgres://postgres:password@localhost?sslmode=disable'
     ;;
 
-  dev-ucarion)
-    dsn=$(AWS_REGION=us-east-2 AWS_PROFILE=dev-ucarion-admin aws secretsmanager get-secret-value --secret-id psql | jq -r .SecretString | jq -r .DATABASE_URL_WRITE)
-    ;;
-
   stage)
     dsn=$(AWS_REGION=us-east-2 AWS_PROFILE=stage-admin aws secretsmanager get-secret-value --secret-id psql | jq -r .SecretString | jq -r .DATABASE_URL_WRITE)
     ;;

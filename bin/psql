@@ -17,14 +17,6 @@ case $1 in
     dsn='postgres://postgres:password@localhost?sslmode=disable'
     ;;
 
-  dev-ucarion)
-    dsn=$(rds_iam_dsn dev-ucarion-admin "ssoready.cluster-ro-cpmk86gsqqm1.us-east-2.rds.amazonaws.com")
-    ;;
-
-  dev-ucarion-write)
-    dsn=$(rds_iam_dsn dev-ucarion-admin "ssoready.cluster-cpmk86gsqqm1.us-east-2.rds.amazonaws.com")
-    ;;
-
   stage)
     dsn=$(rds_iam_dsn stage-admin "ssoready.cluster-ro-clwskyw08lf9.us-east-2.rds.amazonaws.com")
     ;;
