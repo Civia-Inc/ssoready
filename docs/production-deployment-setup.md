@@ -220,13 +220,11 @@ openssl genrsa 4096 | base64 -w 0
 {
   "API_DB": "postgres://db_user@YOUR_RDS_ENDPOINT:5432/postgres?sslmode=require",
   "API_PAGE_ENCODING_VALUE": "PASTE_64_CHAR_HEX_HERE",
-  "API_SAML_STATE_SIGNING_KEY": "PASTE_64_CHAR_HEX_HERE",
-  "API_OAUTH_ID_TOKEN_PRIVATE_KEY_BASE64": "PASTE_BASE64_RSA_KEY_HERE",
-  "API_GOOGLE_OAUTH_CLIENT_SECRET": "YOUR_GOOGLE_OAUTH_CLIENT_SECRET"
+  "API_SAML_STATE_SIGNING_KEY": "PASTE_64_CHAR_HEX_HERE"
 }
 ```
 
-**Note**: Remove these unused keys from secret:
+**Optional secrets** (add to `api` secret only if needed):
 
 - `API_RESEND_API_KEY` (no email)
 - `API_CLOUDFLARE_API_KEY` (no custom domains)
@@ -239,11 +237,13 @@ openssl genrsa 4096 | base64 -w 0
 ```json
 {
   "AUTH_DB": "postgres://db_user@YOUR_RDS_ENDPOINT:5432/postgres?sslmode=require",
-  "AUTH_PAGE_ENCODING_VALUE": "SAME_AS_API_PAGE_ENCODING",
-  "AUTH_SAML_STATE_SIGNING_KEY": "SAME_AS_API_SAML_STATE_SIGNING",
-  "AUTH_OAUTH_ID_TOKEN_PRIVATE_KEY_BASE64": "SAME_AS_API_OAUTH_KEY"
+  "AUTH_PAGE_ENCODING_VALUE": "SAME_AS_API_PAGE_ENCODING_VALUE",
+  "AUTH_SAML_STATE_SIGNING_KEY": "SAME_AS_API_SAML_STATE_SIGNING_KEY",
+  "AUTH_OAUTH_ID_TOKEN_PRIVATE_KEY_BASE64": "PASTE_BASE64_RSA_KEY_HERE"
 }
 ```
+
+**Note**: The `AUTH_OAUTH_ID_TOKEN_PRIVATE_KEY_BASE64` is the RSA private key generated in step 3.4 (only used by auth service, not api service).
 
 **Secret name: `psql`** (JSON, for migrations):
 
