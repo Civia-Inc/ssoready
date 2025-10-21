@@ -46,11 +46,11 @@
         },
         {
           "name": "API_DEFAULT_AUTH_URL",
-          "value": "https://auth.ssoready.com"
+          "value": "https://identity-auth.govai.com"
         },
         {
           "name": "API_DEFAULT_ADMIN_SETUP_URL",
-          "value": "https://admin.ssoready.com/setup"
+          "value": "https://identity-setup.govai.com/setup"
         },
         {
           "name": "API_EMAIL_CHALLENGE_FROM",
@@ -58,7 +58,7 @@
         },
         {
           "name": "API_EMAIL_VERIFICATION_ENDPOINT",
-          "value": "https://app.ssoready.com/verify-email"
+          "value": "https://identity-app.govai.com/verify-email"
         },
         {
           "name": "API_CUSTOM_AUTH_DOMAIN_CLOUDFLARE_ZONE_ID",

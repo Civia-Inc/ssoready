@@ -34,11 +34,11 @@
         },
         {
           "name": "AUTH_DEFAULT_ADMIN_TEST_MODE_URL",
-          "value": "https://admin.ssoready.com/test-mode"
+          "value": "https://identity-setup.govai.com/test-mode"
         },
         {
           "name": "AUTH_BASE_URL",
-          "value": "https://auth.ssoready.com"
+          "value": "https://identity-auth.govai.com"
         }
       ],
       "environmentFiles": [],
