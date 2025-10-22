@@ -12,7 +12,7 @@ case $1 in
     ;;
 
   prod)
-    dsn=$(AWS_REGION=us-east-2 AWS_PROFILE=prod-admin aws secretsmanager get-secret-value --secret-id psql | jq -r .SecretString | jq -r .DATABASE_URL_WRITE)
+    dsn=$(AWS_REGION=us-east-2 AWS_PROFILE=sso-scim aws secretsmanager get-secret-value --secret-id psql | jq -r .SecretString | jq -r .DATABASE_URL_WRITE)
     ;;
 
   *)
