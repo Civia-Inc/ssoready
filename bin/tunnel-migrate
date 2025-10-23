@@ -1,0 +1,72 @@
+#!/bin/bash
+
+set -e -o pipefail
+
+# Function to clean up background processes
+cleanup() {
+    if [ ! -z "$SSH_PID" ]; then
+        echo "🧹 Cleaning up SSH tunnel (PID: $SSH_PID)..."
+        kill $SSH_PID 2>/dev/null || true
+    fi
+}
+
+# Set up trap to cleanup on exit
+trap cleanup EXIT INT TERM
+
+case $1 in
+  prod)
+    echo "🔐 Fetching database connection string from Secrets Manager..."
+    dsn=$(AWS_REGION=us-east-2 AWS_PROFILE=sso-scim aws secretsmanager get-secret-value --secret-id psql | jq -r .SecretString | jq -r .DATABASE_URL_WRITE)
+
+    # Extract hostname from the connection string
+    # Format: postgres://user@hostname:port/database?params
+    db_host=$(echo "$dsn" | sed -n 's|.*@\([^:]*\):.*|\1|p')
+
+    if [ -z "$db_host" ]; then
+        echo "❌ Failed to extract database hostname from connection string"
+        exit 1
+    fi
+
+    echo "🌐 Database host: $db_host"
+    echo "🚇 Opening SSH tunnel through jumpbox-sso..."
+
+    # Open SSH tunnel in background
+    # -N: Don't execute remote command
+    # -L: Local port forwarding
+    # -f: Go to background (we'll manage it ourselves instead)
+    ssh -N -L 5434:${db_host}:5432 jumpbox-sso &
+    SSH_PID=$!
+
+    echo "  → SSH tunnel PID: $SSH_PID"
+    echo "  → Waiting for tunnel to be ready..."
+    sleep 2
+
+    # Check if SSH process is still running
+    if ! kill -0 $SSH_PID 2>/dev/null; then
+        echo "❌ SSH tunnel failed to establish"
+        exit 1
+    fi
+
+    echo "✅ SSH tunnel established"
+
+    # Modify DSN to use localhost through the tunnel
+    # Replace the hostname with localhost:5434
+    local_dsn=$(echo "$dsn" | sed "s|@${db_host}:5432|@localhost:5434|")
+
+    echo "🗄️  Running database migrations..."
+
+    # shellcheck disable=SC2068
+    go run ./cmd/migrate --database "$local_dsn" ${@:2}
+
+    echo "✅ Migrations complete"
+    ;;
+
+  *)
+    echo "Usage: $0 prod [migration-args]"
+    echo ""
+    echo "Examples:"
+    echo "  $0 prod up           # Run all pending migrations"
+    echo "  $0 prod version      # Show current migration version"
+    echo "  $0 prod force 123    # Force set version to 123"
+    exit 1
+esac

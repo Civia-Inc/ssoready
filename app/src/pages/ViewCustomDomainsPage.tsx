@@ -94,7 +94,7 @@ export function ViewCustomDomainsPage() {
             <CardTitle>
               Custom Domain for{" "}
               <code className="text-xl bg-gray-100 py-1 px-2 rounded-sm">
-                auth.ssoready.com
+                identity-auth.govai.com
               </code>
             </CardTitle>
             {appOrganization?.entitledCustomDomains &&
@@ -107,7 +107,7 @@ export function ViewCustomDomainsPage() {
           <CardDescription>
             SAML and SCIM both require that you set up a server that your
             customer's Identity Provider talks to. SSOReady runs that server for
-            you. By default, it's hosted at auth.ssoready.com. With a custom
+            you. By default, it's hosted at identity-auth.govai.com. With a custom
             domain, you can run it on any domain you control.
             <DocsLink to="https://ssoready.com/docs/ssoready-concepts/environments#running-authssoreadycom-on-a-custom-domain" />
           </CardDescription>
@@ -120,7 +120,7 @@ export function ViewCustomDomainsPage() {
                 <>
                   <div>
                     <div className="text-sm font-semibold mb-2">
-                      Custom auth.ssoready.com domain
+                      Custom identity-auth.govai.com domain
                     </div>
                     <div className="text-sm mb-4">
                       {customDomainsSettings.customAuthDomain}
@@ -252,7 +252,7 @@ export function ViewCustomDomainsPage() {
             <CardTitle>
               Custom Domain for{" "}
               <code className="text-xl bg-gray-100 py-1 px-2 rounded-sm">
-                admin.ssoready.com
+                identity-setup.govai.com
               </code>
             </CardTitle>
             {appOrganization?.entitledCustomDomains &&
@@ -265,7 +265,7 @@ export function ViewCustomDomainsPage() {
           <CardDescription>
             SSOReady provides an app that can guide your customer through the
             set-up process for SAML Connections and SCIM Directories. By
-            default, it's hosted at admin.ssoready.com. With a custom domain,
+            default, it's hosted at identity-setup.govai.com. With a custom domain,
             you can run it on any domain you control.
             <DocsLink to="https://ssoready.com/docs/ssoready-concepts/environments#running-adminssoreadycom-on-a-custom-domain" />
           </CardDescription>
@@ -278,7 +278,7 @@ export function ViewCustomDomainsPage() {
                 <>
                   <div>
                     <div className="text-sm font-semibold mb-2">
-                      Custom admin.ssoready.com domain
+                      Custom identity-setup.govai.com domain
                     </div>
                     <div className="text-sm mb-4">
                       {customDomainsSettings.customAdminDomain}
@@ -322,7 +322,7 @@ export function ViewCustomDomainsPage() {
 
                   {customDomainsSettings.customAdminDomainConfigured ? (
                     <p className="mt-4 text-sm text-muted-foreground">
-                      Your custom domain for admin.ssoready.com is active. All
+                      Your custom domain for identity-setup.govai.com is active. All
                       new self-serve setup links use your custom domain.
                     </p>
                   ) : (
@@ -463,7 +463,7 @@ function CopyButton({ value }: { value: string }) {
 const AuthFormSchema = z.object({
   customAuthDomain: z.string().regex(/[a-z0-9.\-+]/, {
     message:
-      "Custom auth.ssoready.com domain must be a DNS hostname, consisting only of a-z, 0-9, dashes, and periods.",
+      "Custom identity-auth.govai.com domain must be a DNS hostname, consisting only of a-z, 0-9, dashes, and periods.",
   }),
 });
 
@@ -514,7 +514,7 @@ function EditCustomAuthDomainAlertModal({
           <form onSubmit={form.handleSubmit(handleSubmit)}>
             <AlertDialogHeader>
               <AlertDialogTitle>
-                Edit custom auth.ssoready.com domain
+                Edit custom identity-auth.govai.com domain
               </AlertDialogTitle>
             </AlertDialogHeader>
 
@@ -524,14 +524,14 @@ function EditCustomAuthDomainAlertModal({
                 name="customAuthDomain"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Custom auth.ssoready.com domain</FormLabel>
+                    <FormLabel>Custom identity-auth.govai.com domain</FormLabel>
                     <FormControl>
                       <Input placeholder="auth.yourcompany.com" {...field} />
                     </FormControl>
                     <FormMessage />
                     <FormDescription>
                       A domain you control that you'd like your customers to see
-                      instead of auth.ssoready.com.
+                      instead of identity-auth.govai.com.
                     </FormDescription>
                   </FormItem>
                 )}
@@ -561,7 +561,7 @@ function EditCustomAuthDomainAlertModal({
 const AdminFormSchema = z.object({
   customAdminDomain: z.string().regex(/[a-z0-9.\-+]/, {
     message:
-      "Custom admin.ssoready.com domain must be a DNS hostname, consisting only of a-z, 0-9, dashes, and periods.",
+      "Custom identity-setup.govai.com domain must be a DNS hostname, consisting only of a-z, 0-9, dashes, and periods.",
   }),
 });
 
@@ -612,7 +612,7 @@ function EditCustomAdminDomainAlertModal({
           <form onSubmit={form.handleSubmit(handleSubmit)}>
             <AlertDialogHeader>
               <AlertDialogTitle>
-                Edit custom admin.ssoready.com domain
+                Edit custom identity-setup.govai.com domain
               </AlertDialogTitle>
             </AlertDialogHeader>
 
@@ -622,14 +622,14 @@ function EditCustomAdminDomainAlertModal({
                 name="customAdminDomain"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Custom admin.ssoready.com domain</FormLabel>
+                    <FormLabel>Custom identity-setup.govai.com domain</FormLabel>
                     <FormControl>
                       <Input placeholder="admin.yourcompany.com" {...field} />
                     </FormControl>
                     <FormMessage />
                     <FormDescription>
                       A domain you control that you'd like your customers to see
-                      instead of admin.ssoready.com.
+                      instead of identity-setup.govai.com.
                     </FormDescription>
                   </FormItem>
                 )}

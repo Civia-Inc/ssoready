@@ -22,7 +22,7 @@
         },
         {
           "name": "API_SENTRY_DSN",
-          "value": "https://75473530264a738cebffd3492b2553de@o4505847296557056.ingest.us.sentry.io/4507353223921664"
+          "value": ""
         },
         {
           "name": "API_SENTRY_ENVIRONMENT",
@@ -34,67 +34,67 @@
         },
         {
           "name": "API_GOOGLE_OAUTH_CLIENT_ID",
-          "value": "43701429226-3674sgkc830ruvovd5tdupohn6rjt7f8.apps.googleusercontent.com"
+          "value": "TODO.apps.googleusercontent.com"
         },
         {
           "name": "API_MICROSOFT_OAUTH_CLIENT_ID",
-          "value": "7c8326f6-65e4-40a7-b689-9b976d066e02"
+          "value": ""
         },
         {
           "name": "API_MICROSOFT_OAUTH_REDIRECT_URI",
-          "value": "https://app.ssoready.com/internal/microsoft-callback"
+          "value": ""
         },
         {
           "name": "API_DEFAULT_AUTH_URL",
-          "value": "https://auth.ssoready.com"
+          "value": "https://identity-auth.govai.com"
         },
         {
           "name": "API_DEFAULT_ADMIN_SETUP_URL",
-          "value": "https://admin.ssoready.com/setup"
+          "value": "https://identity-setup.govai.com/setup"
         },
         {
           "name": "API_EMAIL_CHALLENGE_FROM",
-          "value": "noreply@mail.ssoready.com"
+          "value": "noreply@govai.com"
         },
         {
           "name": "API_EMAIL_VERIFICATION_ENDPOINT",
-          "value": "https://app.ssoready.com/verify-email"
+          "value": "https://identity-app.govai.com/verify-email"
         },
         {
           "name": "API_CUSTOM_AUTH_DOMAIN_CLOUDFLARE_ZONE_ID",
-          "value": "3e90a97b7ec6ee3f1c5a942348dac1e5"
+          "value": ""
         },
         {
           "name": "API_CUSTOM_AUTH_DOMAIN_CLOUDFLARE_CNAME_VALUE",
-          "value": "cname.ssoready-custom-auth-domains.com"
+          "value": ""
         },
         {
           "name": "API_CUSTOM_ADMIN_DOMAIN_CLOUDFLARE_ZONE_ID",
-          "value": "a2aa2f862551a380186a1595ccd22920"
+          "value": ""
         },
         {
           "name": "API_CUSTOM_ADMIN_DOMAIN_CLOUDFLARE_CNAME_VALUE",
-          "value": "cname.ssoready-custom-admin-domains.com"
+          "value": ""
         },
         {
           "name": "API_FLYIO_AUTHPROXY_APP_ID",
-          "value": "ssoready-auth-custom-domain"
+          "value": ""
         },
         {
           "name": "API_FLYIO_AUTHPROXY_APP_CNAME_VALUE",
-          "value": "ssoready-auth-custom-domain.fly.dev."
+          "value": ""
         },
         {
           "name": "API_FLYIO_ADMINPROXY_APP_ID",
-          "value": "ssoready-admin-custom-domain"
+          "value": ""
         },
         {
           "name": "API_FLYIO_ADMINPROXY_APP_CNAME_VALUE",
-          "value": "ssoready-admin-custom-domain.fly.dev."
+          "value": ""
         },
         {
           "name": "API_ADMIN_LOGOS_S3_BUCKET_NAME",
-          "value": "ssoready-prod-admin-logos"
+          "value": "govai-sso-scim-logos"
         }
       ],
       "environmentFiles": [],
@@ -115,8 +115,8 @@
     }
   ],
   "family": "api",
-  "taskRoleArn": "arn:aws:iam::228863541537:role/api",
-  "executionRoleArn": "arn:aws:iam::228863541537:role/ecsTaskExecutionRole",
+  "taskRoleArn": "arn:aws:iam::228863541537:role/sso-scim-production-ecs-api-task-role",
+  "executionRoleArn": "arn:aws:iam::228863541537:role/sso-scim-production-ecs-task-execution-role",
   "networkMode": "awsvpc",
   "volumes": [],
   "status": "ACTIVE",

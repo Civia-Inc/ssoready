@@ -18,19 +18,19 @@ case $1 in
     ;;
 
   stage)
-    dsn=$(rds_iam_dsn stage-admin "ssoready.cluster-ro-clwskyw08lf9.us-east-2.rds.amazonaws.com")
+    dsn=$(rds_iam_dsn stage-admin "")
     ;;
 
   stage-write)
-    dsn=$(rds_iam_dsn stage-admin "ssoready.cluster-clwskyw08lf9.us-east-2.rds.amazonaws.com")
+    dsn=$(rds_iam_dsn stage-admin "")
     ;;
 
   prod)
-    dsn=$(rds_iam_dsn prod-admin "ssoready.cluster-ro-cv0amuqg0z0q.us-east-2.rds.amazonaws.com")
+    dsn=$(rds_iam_dsn sso-scim "sso-scim-production.cluster-ro-cxeksu2661co.us-east-2.rds.amazonaws.com")
     ;;
 
   prod-write)
-    dsn=$(rds_iam_dsn prod-admin "ssoready.cluster-cv0amuqg0z0q.us-east-2.rds.amazonaws.com")
+    dsn=$(rds_iam_dsn sso-scim "sso-scim-production-instance.cxeksu2661co.us-east-2.rds.amazonaws.com")
     ;;
 
   *)
@@ -38,4 +38,5 @@ case $1 in
     exit 1
 esac
 
-psql "$dsn"
+echo "$dsn"
+# psql "$dsn"

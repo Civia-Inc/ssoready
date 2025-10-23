@@ -147,10 +147,10 @@ export function ViewEnvironmentPage() {
               )}
             </div>
             <div className="text-sm col-span-2 text-muted-foreground flex items-center gap-x-2">
-              Custom auth.ssoready.com domain
+              Custom identity-auth.govai.com domain
               <InfoTooltip>
                 The URL your customers see instead of{" "}
-                <span className="font-mono">auth.ssoready.com</span>.
+                <span className="font-mono">identity-auth.govai.com</span>.
                 <DocsLink to="https://ssoready.com/docs/ssoready-concepts/environments#custom-ssoready-auth-url" />
               </InfoTooltip>
             </div>

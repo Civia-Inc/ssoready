@@ -22,7 +22,7 @@
         },
         {
           "name": "AUTH_SENTRY_DSN",
-          "value": "https://768b1ed331016a969472d275b1189fa8@o4505847296557056.ingest.us.sentry.io/4507353266192384"
+          "value": ""
         },
         {
           "name": "AUTH_SENTRY_ENVIRONMENT",
@@ -34,11 +34,11 @@
         },
         {
           "name": "AUTH_DEFAULT_ADMIN_TEST_MODE_URL",
-          "value": "https://admin.ssoready.com/test-mode"
+          "value": "https://identity-setup.govai.com/test-mode"
         },
         {
           "name": "AUTH_BASE_URL",
-          "value": "https://auth.ssoready.com"
+          "value": "https://identity-auth.govai.com"
         }
       ],
       "environmentFiles": [],
@@ -59,8 +59,8 @@
     }
   ],
   "family": "auth",
-  "taskRoleArn": "arn:aws:iam::228863541537:role/auth",
-  "executionRoleArn": "arn:aws:iam::228863541537:role/ecsTaskExecutionRole",
+  "taskRoleArn": "arn:aws:iam::228863541537:role/sso-scim-production-ecs-auth-task-role",
+  "executionRoleArn": "arn:aws:iam::228863541537:role/sso-scim-production-ecs-task-execution-role",
   "networkMode": "awsvpc",
   "volumes": [],
   "status": "ACTIVE",

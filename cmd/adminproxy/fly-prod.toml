@@ -9,7 +9,7 @@ primary_region = 'iad'
 [build]
 
 [env]
-  AUTHPROXY_AUTH_URL = 'https://admin.ssoready.com'
+  AUTHPROXY_AUTH_URL = 'https://identity-setup.govai.com'
 
 [http_service]
   internal_port = 80

@@ -183,19 +183,35 @@ aws ecr create-repository --repository-name auth --region us-east-2
 
 **Specifications**:
 
-- Engine: PostgreSQL 15+
+- Engine: PostgreSQL 15+ (PostgreSQL 16 recommended)
 - Capacity: Aurora Serverless v2 (recommended) or provisioned
-- Enable IAM database authentication
 - VPC with private subnets
 - Security group allowing port 5432 from ECS tasks
 
-**Create database user**:
+**Create database and user** (connect as master user):
 
 ```sql
-CREATE USER db_user;
-GRANT rds_iam TO db_user;
-GRANT ALL PRIVILEGES ON DATABASE postgres TO db_user;
+-- Create user with password (do NOT grant rds_iam - use password auth only)
+CREATE USER db_user WITH PASSWORD 'your-secure-password-here' LOGIN;
+
+-- Grant database-level permissions
+GRANT CONNECT ON DATABASE ssoscim TO db_user;
+GRANT ALL PRIVILEGES ON DATABASE ssoscim TO db_user;
+
+-- Grant schema-level permissions
+GRANT USAGE ON SCHEMA public TO db_user;
+GRANT CREATE ON SCHEMA public TO db_user;
+
+-- Grant permissions on existing objects
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO db_user;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO db_user;
+
+-- Grant permissions on future objects (important for migrations)
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON TABLES TO db_user;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON SEQUENCES TO db_user;
 ```
+
+**Important**: Use password-based authentication only. Do NOT grant `rds_iam` role to `db_user` as this forces IAM authentication which complicates connection handling.
 
 ### 3.4 Generate Cryptographic Secrets
 
@@ -218,15 +234,13 @@ openssl genrsa 4096 | base64 -w 0
 
 ```json
 {
-  "API_DB": "postgres://db_user@YOUR_RDS_ENDPOINT:5432/postgres?sslmode=require",
+  "API_DB": "postgres://db_user:YOUR_DB_PASSWORD@YOUR_RDS_ENDPOINT:5432/ssoscim?sslmode=require",
   "API_PAGE_ENCODING_VALUE": "PASTE_64_CHAR_HEX_HERE",
-  "API_SAML_STATE_SIGNING_KEY": "PASTE_64_CHAR_HEX_HERE",
-  "API_OAUTH_ID_TOKEN_PRIVATE_KEY_BASE64": "PASTE_BASE64_RSA_KEY_HERE",
-  "API_GOOGLE_OAUTH_CLIENT_SECRET": "YOUR_GOOGLE_OAUTH_CLIENT_SECRET"
+  "API_SAML_STATE_SIGNING_KEY": "PASTE_64_CHAR_HEX_HERE"
 }
 ```
 
-**Note**: Remove these unused keys from secret:
+**Optional secrets** (add to `api` secret only if needed):
 
 - `API_RESEND_API_KEY` (no email)
 - `API_CLOUDFLARE_API_KEY` (no custom domains)
@@ -238,20 +252,26 @@ openssl genrsa 4096 | base64 -w 0
 
 ```json
 {
-  "AUTH_DB": "postgres://db_user@YOUR_RDS_ENDPOINT:5432/postgres?sslmode=require",
-  "AUTH_PAGE_ENCODING_VALUE": "SAME_AS_API_PAGE_ENCODING",
-  "AUTH_SAML_STATE_SIGNING_KEY": "SAME_AS_API_SAML_STATE_SIGNING",
-  "AUTH_OAUTH_ID_TOKEN_PRIVATE_KEY_BASE64": "SAME_AS_API_OAUTH_KEY"
+  "AUTH_DB": "postgres://db_user:YOUR_DB_PASSWORD@YOUR_RDS_ENDPOINT:5432/ssoscim?sslmode=require",
+  "AUTH_PAGE_ENCODING_VALUE": "SAME_AS_API_PAGE_ENCODING_VALUE",
+  "AUTH_SAML_STATE_SIGNING_KEY": "SAME_AS_API_SAML_STATE_SIGNING_KEY",
+  "AUTH_OAUTH_ID_TOKEN_PRIVATE_KEY_BASE64": "PASTE_BASE64_RSA_KEY_HERE"
 }
 ```
+
+**Note**: Use the same password you set when creating the `db_user` in section 3.3.
+
+**Note**: The `AUTH_OAUTH_ID_TOKEN_PRIVATE_KEY_BASE64` is the RSA private key generated in step 3.4 (only used by auth service, not api service).
 
 **Secret name: `psql`** (JSON, for migrations):
 
 ```json
 {
-  "DATABASE_URL_WRITE": "postgres://db_user@YOUR_RDS_ENDPOINT:5432/postgres?sslmode=require"
+  "DATABASE_URL_WRITE": "postgres://db_user:YOUR_DB_PASSWORD@YOUR_RDS_ENDPOINT:5432/ssoscim?sslmode=require"
 }
 ```
+
+**Note**: This secret is used by `bin/migrate` and `bin/tunnel-migrate` scripts. Use the same password as above.
 
 ### 3.6 Create S3 Bucket
 
