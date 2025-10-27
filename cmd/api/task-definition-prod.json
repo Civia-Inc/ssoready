@@ -22,7 +22,7 @@
         },
         {
           "name": "API_SENTRY_DSN",
-          "value": ""
+          "value": "https://ce7a9aba392a59685386c8065b131e09@o4510262139158528.ingest.us.sentry.io/4510262156197888"
         },
         {
           "name": "API_SENTRY_ENVIRONMENT",

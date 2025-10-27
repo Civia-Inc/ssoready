@@ -40,6 +40,9 @@ jobs:
           APP_API_URL: https://identity-api.govai.com/internal/connect
           APP_APP_URL: https://identity-app.govai.com
           APP_PUBLIC_API_URL: https://identity-api.govai.com
+          APP_GOOGLE_OAUTH_CLIENT_ID: 389237239773-dlvu8vjqhou50kirtm68m27kliudicj8.apps.googleusercontent.com
+          APP_SENTRY_DSN: https://23aab2055b0af06bab6ee57a822a98c1@o4510262139158528.ingest.us.sentry.io/4510262190342144
+          APP_SENTRY_ENVIRONMENT: prod
         run: npm run build
 
       - name: Configure AWS credentials
@@ -95,6 +98,8 @@ jobs:
       - name: Build
         env:
           ADMIN_API_URL: https://identity-api.govai.com/internal/connect
+          APP_SENTRY_DSN: https://a3bd611fe5ede0958f2b78e5c8df43be@o4510262139158528.ingest.us.sentry.io/4510262195126272
+          APP_SENTRY_ENVIRONMENT: prod
         run: npm run build
 
       - name: Configure AWS credentials
