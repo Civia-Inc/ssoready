@@ -75,13 +75,13 @@ graph TB
 
 ### Component Responsibilities
 
-| Component | Purpose | Technology |
-|-----------|---------|------------|
-| **API Service** | REST API for managing organizations, environments, SAML connections, and SCIM directories. Handles all administrative operations and SDK requests. | Go + Connect RPC |
-| **Auth Service** | Handles SAML authentication flows and SCIM provisioning endpoints. Processes SAML assertions from IdPs and serves as SCIM 2.0 server. | Go |
-| **Admin UI** | Management interface for configuring SAML/SCIM settings, viewing logs, and managing organizations. | React + TypeScript |
-| **Self-Serve UI** | Customer-facing interface allowing your customers to configure their own SAML/SCIM connections without developer involvement. | React + TypeScript |
-| **PostgreSQL** | Stores all configuration data, SAML flows, SCIM user/group data, and audit logs. | PostgreSQL |
+| Component | Purpose | Technology | URL |
+|-----------|---------|------------|-----|
+| **API Service** | REST API for managing organizations, environments, SAML connections, and SCIM directories. Handles all administrative operations and SDK requests. | Go + Connect RPC | identity-api.govai.com |
+| **Auth Service** | Handles SAML authentication flows and SCIM provisioning endpoints. Processes SAML assertions from IdPs and serves as SCIM 2.0 server. | Go | identity-auth.govai.com |
+| **App (Admin) UI** | Management interface for configuring SAML/SCIM settings, viewing logs, and managing organizations. Referred to as app in code. | React + TypeScript | identity-app.govai.com |
+| **Self-Serve UI** | Customer-facing interface allowing your customers to configure their own SAML/SCIM connections without developer involvement. Referred to as admin in code. | React + TypeScript | identity-setup.govai.com |
+| **PostgreSQL** | Stores all configuration data, SAML flows, SCIM user/group data, and audit logs. | PostgreSQL | - |
 
 ### Data Flow Examples
 
