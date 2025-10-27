@@ -22,7 +22,7 @@
         },
         {
           "name": "AUTH_SENTRY_DSN",
-          "value": ""
+          "value": "https://bca4aa9fac02b11ddc34f14f495c7994@o4510262139158528.ingest.us.sentry.io/4510262184837120"
         },
         {
           "name": "AUTH_SENTRY_ENVIRONMENT",
