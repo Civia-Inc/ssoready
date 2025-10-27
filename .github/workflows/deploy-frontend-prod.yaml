@@ -40,6 +40,7 @@ jobs:
           APP_API_URL: https://identity-api.govai.com/internal/connect
           APP_APP_URL: https://identity-app.govai.com
           APP_PUBLIC_API_URL: https://identity-api.govai.com
+          APP_GOOGLE_OAUTH_CLIENT_ID: 389237239773-dlvu8vjqhou50kirtm68m27kliudicj8.apps.googleusercontent.com
         run: npm run build
 
       - name: Configure AWS credentials
