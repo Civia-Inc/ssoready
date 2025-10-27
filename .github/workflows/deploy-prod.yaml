@@ -3,6 +3,12 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'cmd/**'
+      - 'internal/**'
+      - 'go.mod'
+      - 'go.sum'
+
 env:
   AWS_REGION: us-east-2
   ECR_REGISTRY_URL: 228863541537.dkr.ecr.us-east-2.amazonaws.com
