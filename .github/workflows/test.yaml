@@ -186,9 +186,9 @@ jobs:
 
       - name: Run Go fmt check
         run: |
-          if [ "$(gofmt -s -l . | wc -l)" -gt 0 ]; then
+          if [ "$(gofmt -l . | wc -l)" -gt 0 ]; then
             echo "The following files are not formatted:"
-            gofmt -s -l .
+            gofmt -l .
             exit 1
           fi
 
