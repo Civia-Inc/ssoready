@@ -6,9 +6,9 @@ import (
 	"fmt"
 
 	"connectrpc.com/connect"
-	"github.com/google/uuid"
 	"github.com/Civia-Inc/ssoready/internal/store/idformat"
 	"github.com/Civia-Inc/ssoready/internal/store/queries"
+	"github.com/google/uuid"
 )
 
 type AuthOAuthGetClientRequest struct {

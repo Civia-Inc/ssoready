@@ -107,8 +107,8 @@ export function ViewCustomDomainsPage() {
           <CardDescription>
             SAML and SCIM both require that you set up a server that your
             customer's Identity Provider talks to. SSOReady runs that server for
-            you. By default, it's hosted at identity-auth.govai.com. With a custom
-            domain, you can run it on any domain you control.
+            you. By default, it's hosted at identity-auth.govai.com. With a
+            custom domain, you can run it on any domain you control.
             <DocsLink to="https://ssoready.com/docs/ssoready-concepts/environments#running-authssoreadycom-on-a-custom-domain" />
           </CardDescription>
         </CardHeader>
@@ -265,8 +265,8 @@ export function ViewCustomDomainsPage() {
           <CardDescription>
             SSOReady provides an app that can guide your customer through the
             set-up process for SAML Connections and SCIM Directories. By
-            default, it's hosted at identity-setup.govai.com. With a custom domain,
-            you can run it on any domain you control.
+            default, it's hosted at identity-setup.govai.com. With a custom
+            domain, you can run it on any domain you control.
             <DocsLink to="https://ssoready.com/docs/ssoready-concepts/environments#running-adminssoreadycom-on-a-custom-domain" />
           </CardDescription>
         </CardHeader>
@@ -322,8 +322,8 @@ export function ViewCustomDomainsPage() {
 
                   {customDomainsSettings.customAdminDomainConfigured ? (
                     <p className="mt-4 text-sm text-muted-foreground">
-                      Your custom domain for identity-setup.govai.com is active. All
-                      new self-serve setup links use your custom domain.
+                      Your custom domain for identity-setup.govai.com is active.
+                      All new self-serve setup links use your custom domain.
                     </p>
                   ) : (
                     <>
@@ -622,7 +622,9 @@ function EditCustomAdminDomainAlertModal({
                 name="customAdminDomain"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Custom identity-setup.govai.com domain</FormLabel>
+                    <FormLabel>
+                      Custom identity-setup.govai.com domain
+                    </FormLabel>
                     <FormControl>
                       <Input placeholder="admin.yourcompany.com" {...field} />
                     </FormControl>

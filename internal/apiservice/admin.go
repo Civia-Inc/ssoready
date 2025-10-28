@@ -10,11 +10,11 @@ import (
 	"time"
 
 	"connectrpc.com/connect"
+	ssoreadyv1 "github.com/Civia-Inc/ssoready/internal/gen/ssoready/v1"
+	"github.com/Civia-Inc/ssoready/internal/saml"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/smithy-go"
-	ssoreadyv1 "github.com/Civia-Inc/ssoready/internal/gen/ssoready/v1"
-	"github.com/Civia-Inc/ssoready/internal/saml"
 )
 
 func (s *Service) AppGetAdminSettings(ctx context.Context, req *connect.Request[ssoreadyv1.AppGetAdminSettingsRequest]) (*connect.Response[ssoreadyv1.AppGetAdminSettingsResponse], error) {

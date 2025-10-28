@@ -7,11 +7,11 @@ import (
 	"fmt"
 	"log/slog"
 
-	"github.com/google/uuid"
 	"github.com/Civia-Inc/ssoready/internal/authn"
 	ssoreadyv1 "github.com/Civia-Inc/ssoready/internal/gen/ssoready/v1"
 	"github.com/Civia-Inc/ssoready/internal/store/idformat"
 	"github.com/Civia-Inc/ssoready/internal/store/queries"
+	"github.com/google/uuid"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 

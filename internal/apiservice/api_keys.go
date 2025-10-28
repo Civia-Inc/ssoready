@@ -5,9 +5,9 @@ import (
 	"fmt"
 
 	"connectrpc.com/connect"
-	"github.com/segmentio/analytics-go/v3"
 	"github.com/Civia-Inc/ssoready/internal/appanalytics"
 	ssoreadyv1 "github.com/Civia-Inc/ssoready/internal/gen/ssoready/v1"
+	"github.com/segmentio/analytics-go/v3"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 

@@ -10,12 +10,12 @@ import (
 	"time"
 
 	"connectrpc.com/connect"
-	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5"
 	"github.com/Civia-Inc/ssoready/internal/authn"
 	"github.com/Civia-Inc/ssoready/internal/microsoft"
 	"github.com/Civia-Inc/ssoready/internal/store/idformat"
 	"github.com/Civia-Inc/ssoready/internal/store/queries"
+	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
 )
 
 type GetAppSessionRequest struct {

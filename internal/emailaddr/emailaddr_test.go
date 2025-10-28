@@ -3,8 +3,8 @@ package emailaddr_test
 import (
 	"testing"
 
-	"github.com/google/go-cmp/cmp"
 	"github.com/Civia-Inc/ssoready/internal/emailaddr"
+	"github.com/google/go-cmp/cmp"
 )
 
 func TestParse(t *testing.T) {
@@ -41,7 +41,7 @@ func TestParse(t *testing.T) {
 		 * - https://github.com/ssoready/ssoready/issues/185
 		 */
 		{
-			in: "john-doe#EXT#@example.com",
+			in:  "john-doe#EXT#@example.com",
 			out: "example.com",
 		},
 	}

@@ -10,12 +10,12 @@ import (
 	"time"
 
 	"connectrpc.com/connect"
-	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5"
-	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/Civia-Inc/ssoready/internal/authn"
 	"github.com/Civia-Inc/ssoready/internal/store/idformat"
 	"github.com/Civia-Inc/ssoready/internal/store/queries"
+	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgconn"
 )
 
 // todo break this code out from api's store layer, because the auth model is completely different

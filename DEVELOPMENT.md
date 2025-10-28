@@ -666,6 +666,41 @@ If you modify the database schema:
 make queries
 ```
 
+## Code Formatting
+
+### Frontend Code (React/TypeScript)
+
+Format all frontend code using prettier:
+
+```bash
+# Format app frontend
+cd app && npm run fmt
+
+# Format admin frontend
+cd admin && npm run fmt
+```
+
+**Check formatting without changing files:**
+```bash
+# Check app formatting
+cd app && npm run fmt-check
+
+# Check admin formatting
+cd admin && npm run fmt-check
+```
+
+### Backend Code (Go)
+
+Format all Go code using go fmt:
+
+```bash
+# Format all Go files in the project
+go fmt ./cmd/... ./internal/...
+
+# Check what would be formatted (without changing files)
+go fmt -d ./cmd/... ./internal/...
+```
+
 ## Contributing
 
 When submitting changes:

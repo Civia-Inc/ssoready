@@ -20,10 +20,10 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
-	"github.com/gorilla/mux"
 	"github.com/Civia-Inc/ssoready/internal/emailaddr"
 	ssoreadyv1 "github.com/Civia-Inc/ssoready/internal/gen/ssoready/v1"
 	"github.com/Civia-Inc/ssoready/internal/store"
+	"github.com/gorilla/mux"
 	"google.golang.org/protobuf/types/known/structpb"
 )
 

@@ -7,11 +7,11 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/google/uuid"
 	"github.com/Civia-Inc/ssoready/internal/authn"
 	ssoreadyv1 "github.com/Civia-Inc/ssoready/internal/gen/ssoready/v1"
 	"github.com/Civia-Inc/ssoready/internal/store/idformat"
 	"github.com/Civia-Inc/ssoready/internal/store/queries"
+	"github.com/google/uuid"
 )
 
 func (s *Store) CreateSetupURL(ctx context.Context, req *ssoreadyv1.CreateSetupURLRequest) (*ssoreadyv1.CreateSetupURLResponse, error) {

@@ -3,11 +3,11 @@ package store
 import (
 	"context"
 
-	"github.com/google/uuid"
 	"github.com/Civia-Inc/ssoready/internal/authn"
 	ssoreadyv1 "github.com/Civia-Inc/ssoready/internal/gen/ssoready/v1"
 	"github.com/Civia-Inc/ssoready/internal/store/idformat"
 	"github.com/Civia-Inc/ssoready/internal/store/queries"
+	"github.com/google/uuid"
 )
 
 func (s *Store) ListOrganizations(ctx context.Context, req *ssoreadyv1.ListOrganizationsRequest) (*ssoreadyv1.ListOrganizationsResponse, error) {

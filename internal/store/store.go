@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/jackc/pgx/v5"
-	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/Civia-Inc/ssoready/internal/pagetoken"
 	"github.com/Civia-Inc/ssoready/internal/statesign"
 	"github.com/Civia-Inc/ssoready/internal/store/queries"
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
