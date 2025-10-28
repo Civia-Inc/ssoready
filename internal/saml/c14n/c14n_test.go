@@ -5,8 +5,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/ssoready/ssoready/internal/saml/c14n"
-	"github.com/ssoready/ssoready/internal/saml/uxml"
+	"github.com/Civia-Inc/ssoready/internal/saml/c14n"
+	"github.com/Civia-Inc/ssoready/internal/saml/uxml"
 	"github.com/stretchr/testify/assert"
 )
 

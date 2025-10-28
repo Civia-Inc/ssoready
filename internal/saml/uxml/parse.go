@@ -7,7 +7,7 @@ import (
 
 	"github.com/alecthomas/participle/v2"
 	"github.com/alecthomas/participle/v2/lexer"
-	"github.com/ssoready/ssoready/internal/saml/uxml/stack"
+	"github.com/Civia-Inc/ssoready/internal/saml/uxml/stack"
 )
 
 var parser = participle.MustBuild[doc](

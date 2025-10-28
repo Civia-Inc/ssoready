@@ -6,8 +6,8 @@ import (
 
 	"connectrpc.com/connect"
 	"github.com/segmentio/analytics-go/v3"
-	"github.com/ssoready/ssoready/internal/appanalytics"
-	ssoreadyv1 "github.com/ssoready/ssoready/internal/gen/ssoready/v1"
+	"github.com/Civia-Inc/ssoready/internal/appanalytics"
+	ssoreadyv1 "github.com/Civia-Inc/ssoready/internal/gen/ssoready/v1"
 )
 
 func (s *Service) ListEnvironments(ctx context.Context, req *connect.Request[ssoreadyv1.ListEnvironmentsRequest]) (*connect.Response[ssoreadyv1.ListEnvironmentsResponse], error) {

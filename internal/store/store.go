@@ -7,9 +7,9 @@ import (
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/ssoready/ssoready/internal/pagetoken"
-	"github.com/ssoready/ssoready/internal/statesign"
-	"github.com/ssoready/ssoready/internal/store/queries"
+	"github.com/Civia-Inc/ssoready/internal/pagetoken"
+	"github.com/Civia-Inc/ssoready/internal/statesign"
+	"github.com/Civia-Inc/ssoready/internal/store/queries"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 

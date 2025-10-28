@@ -5,7 +5,7 @@ import (
 
 	"connectrpc.com/connect"
 	"github.com/segmentio/analytics-go/v3"
-	"github.com/ssoready/ssoready/internal/authn"
+	"github.com/Civia-Inc/ssoready/internal/authn"
 )
 
 func NewInterceptor(client analytics.Client) connect.UnaryInterceptorFunc {

@@ -5,10 +5,10 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
-	"github.com/ssoready/ssoready/internal/authn"
-	ssoreadyv1 "github.com/ssoready/ssoready/internal/gen/ssoready/v1"
-	"github.com/ssoready/ssoready/internal/store/idformat"
-	"github.com/ssoready/ssoready/internal/store/queries"
+	"github.com/Civia-Inc/ssoready/internal/authn"
+	ssoreadyv1 "github.com/Civia-Inc/ssoready/internal/gen/ssoready/v1"
+	"github.com/Civia-Inc/ssoready/internal/store/idformat"
+	"github.com/Civia-Inc/ssoready/internal/store/queries"
 )
 
 func (s *Store) AppListSCIMUsers(ctx context.Context, req *ssoreadyv1.AppListSCIMUsersRequest) (*ssoreadyv1.AppListSCIMUsersResponse, error) {

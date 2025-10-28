@@ -6,11 +6,11 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/cloudflare/cloudflare-go"
 	"github.com/resend/resend-go/v2"
-	"github.com/ssoready/ssoready/internal/flyio"
-	"github.com/ssoready/ssoready/internal/gen/ssoready/v1/ssoreadyv1connect"
-	"github.com/ssoready/ssoready/internal/google"
-	"github.com/ssoready/ssoready/internal/microsoft"
-	"github.com/ssoready/ssoready/internal/store"
+	"github.com/Civia-Inc/ssoready/internal/flyio"
+	"github.com/Civia-Inc/ssoready/internal/gen/ssoready/v1/ssoreadyv1connect"
+	"github.com/Civia-Inc/ssoready/internal/google"
+	"github.com/Civia-Inc/ssoready/internal/microsoft"
+	"github.com/Civia-Inc/ssoready/internal/store"
 )
 
 type Service struct {

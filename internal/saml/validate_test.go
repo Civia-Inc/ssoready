@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ssoready/ssoready/internal/saml"
+	"github.com/Civia-Inc/ssoready/internal/saml"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

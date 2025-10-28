@@ -584,7 +584,7 @@ For testing SAML, you can use:
 
 ## Getting Help
 
-- Check existing [GitHub Issues](https://github.com/ssoready/ssoready/issues)
+- Check existing [GitHub Issues](https://github.com/Civia-Inc/ssoready/issues)
 - Join the community discussions
 - Read the [main README](./README.md)
 

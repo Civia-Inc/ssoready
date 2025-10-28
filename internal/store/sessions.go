@@ -12,10 +12,10 @@ import (
 	"connectrpc.com/connect"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
-	"github.com/ssoready/ssoready/internal/authn"
-	"github.com/ssoready/ssoready/internal/microsoft"
-	"github.com/ssoready/ssoready/internal/store/idformat"
-	"github.com/ssoready/ssoready/internal/store/queries"
+	"github.com/Civia-Inc/ssoready/internal/authn"
+	"github.com/Civia-Inc/ssoready/internal/microsoft"
+	"github.com/Civia-Inc/ssoready/internal/store/idformat"
+	"github.com/Civia-Inc/ssoready/internal/store/queries"
 )
 
 type GetAppSessionRequest struct {
