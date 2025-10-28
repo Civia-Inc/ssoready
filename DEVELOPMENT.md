@@ -96,8 +96,8 @@ Once all services are running, you can access:
 
 | Service | URL | Description |
 |---------|-----|-------------|
-| **Admin UI** | http://localhost:8083 | Management interface for configuring SAML/SCIM |
-| **Self-Serve UI** | http://localhost:8082 | Customer-facing setup interface |
+| **Admin/Self-Serve UI** | http://localhost:8083 | Customer-facing setup interface |
+| **App UI** | http://localhost:8082 |  Management interface for configuring SAML/SCIM |
 | **API Service** | http://localhost:8080 | REST API backend |
 | **Auth Service** | http://localhost:8081 | Authentication and SAML handler |
 | **PostgreSQL** | localhost:5433 | Database (user: `postgres`, password: `password`) |

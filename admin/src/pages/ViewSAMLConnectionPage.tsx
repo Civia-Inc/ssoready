@@ -11,7 +11,7 @@ import {
   getSAMLConnection,
   listOrganizations,
   listSAMLConnections,
-  listSAMLFlows,
+  appListSAMLFlows,
   parseSAMLMetadata,
   updateOrganization,
   updateSAMLConnection,
