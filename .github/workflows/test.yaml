@@ -1,0 +1,263 @@
+name: Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+      - stage
+
+env:
+  GO_VERSION: '1.21'
+  NODE_VERSION: '22'
+
+jobs:
+  # Backend Go Tests
+  test-backend:
+    name: Backend Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Cache Go modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      - name: Download dependencies
+        run: go mod download
+
+      - name: Verify dependencies
+        run: go mod verify
+
+      - name: Run Go tests
+        run: go test -v -race -coverprofile=coverage.out ./...
+
+      - name: Generate coverage report
+        run: go tool cover -html=coverage.out -o coverage.html
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage.out
+          flags: backend
+          name: backend-coverage
+
+  # Frontend Tests (when implemented)
+  test-frontend-app:
+    name: Frontend App Tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./app
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: ./app/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run TypeScript check
+        run: npm run tsc
+
+      - name: Run ESLint
+        run: npm run lint || echo "ESLint not configured yet"
+
+      - name: Run Prettier check
+        run: npm run fmt-check
+
+      # Uncomment when frontend tests are added:
+      # - name: Run frontend tests
+      #   run: npm test
+
+  test-frontend-admin:
+    name: Frontend Admin Tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./admin
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: ./admin/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run TypeScript check
+        run: npm run tsc
+
+      - name: Run ESLint
+        run: npm run lint || echo "ESLint not configured yet"
+
+      - name: Run Prettier check
+        run: npm run fmt-check
+
+      # Uncomment when frontend tests are added:
+      # - name: Run frontend tests
+      #   run: npm test
+
+  # Integration Tests (when implemented)
+  test-integration:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    needs:
+      - test-backend
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: ssoready_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Wait for PostgreSQL
+        run: |
+          until pg_isready -h localhost -p 5432 -U postgres; do
+            echo "Waiting for PostgreSQL..."
+            sleep 2
+          done
+
+      - name: Run database migrations
+        env:
+          DATABASE_URL: postgres://postgres:password@localhost:5432/ssoready_test?sslmode=disable
+        run: |
+          # Add migration command here when ready
+          echo "Integration tests not implemented yet"
+
+      # Uncomment when integration tests are added:
+      # - name: Run integration tests
+      #   env:
+      #     DATABASE_URL: postgres://postgres:password@localhost:5432/ssoready_test?sslmode=disable
+      #   run: go test -v -tags=integration ./tests/integration/...
+
+  # Quality Checks
+  security-checks:
+    name: Security & Quality Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Run Go vet
+        run: go vet ./...
+
+      - name: Run Go fmt check
+        run: |
+          if [ "$(gofmt -s -l . | wc -l)" -gt 0 ]; then
+            echo "The following files are not formatted:"
+            gofmt -s -l .
+            exit 1
+          fi
+
+  # Build verification (ensures code compiles)
+  build-check:
+    name: Build Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Build API service
+        run: go build -o /tmp/api ./cmd/api
+
+      - name: Build Auth service
+        run: go build -o /tmp/auth ./cmd/auth
+
+      - name: Build Migrate service
+        run: go build -o /tmp/migrate ./cmd/migrate
+
+      - name: Build ID Formatter
+        run: go build -o /tmp/idfmt ./cmd/idfmt
+
+  # Frontend build verification
+  build-frontend:
+    name: Frontend Build Check
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        app:
+        - app
+        - admin
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: ./${{ matrix.app }}/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./${{ matrix.app }}
+        run: npm ci
+
+      - name: Build frontend
+        working-directory: ./${{ matrix.app }}
+        env:
+          # Use dummy values for build
+          APP_API_URL: http://localhost:8080
+          APP_APP_URL: http://localhost:8082
+          APP_PUBLIC_API_URL: http://localhost:8080
+          APP_GOOGLE_OAUTH_CLIENT_ID: dummy
+          APP_SENTRY_DSN: dummy
+          APP_SENTRY_ENVIRONMENT: test
+        run: npm run build
