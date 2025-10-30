@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/ssoready/ssoready/internal/authn"
-	ssoreadyv1 "github.com/ssoready/ssoready/internal/gen/ssoready/v1"
-	"github.com/ssoready/ssoready/internal/store/idformat"
+	"github.com/Civia-Inc/ssoready/internal/authn"
+	ssoreadyv1 "github.com/Civia-Inc/ssoready/internal/gen/ssoready/v1"
+	"github.com/Civia-Inc/ssoready/internal/store/idformat"
 )
 
 func (s *Store) ListAppUsers(ctx context.Context, req *ssoreadyv1.ListAppUsersRequest) (*ssoreadyv1.ListAppUsersResponse, error) {

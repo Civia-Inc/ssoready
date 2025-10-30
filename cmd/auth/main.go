@@ -13,18 +13,18 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/Civia-Inc/ssoready/internal/authservice"
+	"github.com/Civia-Inc/ssoready/internal/hexkey"
+	"github.com/Civia-Inc/ssoready/internal/pagetoken"
+	"github.com/Civia-Inc/ssoready/internal/secretload"
+	"github.com/Civia-Inc/ssoready/internal/slogcorrelation"
+	"github.com/Civia-Inc/ssoready/internal/store"
 	"github.com/cyrusaf/ctxlog"
 	"github.com/getsentry/sentry-go"
 	sentryhttp "github.com/getsentry/sentry-go/http"
 	"github.com/gorilla/mux"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/ssoready/conf"
-	"github.com/ssoready/ssoready/internal/authservice"
-	"github.com/ssoready/ssoready/internal/hexkey"
-	"github.com/ssoready/ssoready/internal/pagetoken"
-	"github.com/ssoready/ssoready/internal/secretload"
-	"github.com/ssoready/ssoready/internal/slogcorrelation"
-	"github.com/ssoready/ssoready/internal/store"
 )
 
 func main() {

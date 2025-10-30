@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/ssoready/ssoready/internal/pagetoken"
+	"github.com/Civia-Inc/ssoready/internal/pagetoken"
 )
 
 func TestEncoder(t *testing.T) {

@@ -96,8 +96,8 @@ Once all services are running, you can access:
 
 | Service | URL | Description |
 |---------|-----|-------------|
-| **Admin UI** | http://localhost:8083 | Management interface for configuring SAML/SCIM |
-| **Self-Serve UI** | http://localhost:8082 | Customer-facing setup interface |
+| **Admin/Self-Serve UI** | http://localhost:8083 | Customer-facing setup interface |
+| **App UI** | http://localhost:8082 |  Management interface for configuring SAML/SCIM |
 | **API Service** | http://localhost:8080 | REST API backend |
 | **Auth Service** | http://localhost:8081 | Authentication and SAML handler |
 | **PostgreSQL** | localhost:5433 | Database (user: `postgres`, password: `password`) |
@@ -584,7 +584,7 @@ For testing SAML, you can use:
 
 ## Getting Help
 
-- Check existing [GitHub Issues](https://github.com/ssoready/ssoready/issues)
+- Check existing [GitHub Issues](https://github.com/Civia-Inc/ssoready/issues)
 - Join the community discussions
 - Read the [main README](./README.md)
 
@@ -664,6 +664,41 @@ If you modify the database schema:
 
 ```bash
 make queries
+```
+
+## Code Formatting
+
+### Frontend Code (React/TypeScript)
+
+Format all frontend code using prettier:
+
+```bash
+# Format app frontend
+cd app && npm run fmt
+
+# Format admin frontend
+cd admin && npm run fmt
+```
+
+**Check formatting without changing files:**
+```bash
+# Check app formatting
+cd app && npm run fmt-check
+
+# Check admin formatting
+cd admin && npm run fmt-check
+```
+
+### Backend Code (Go)
+
+Format all Go code using go fmt:
+
+```bash
+# Format all Go files in the project
+go fmt ./cmd/... ./internal/...
+
+# Check what would be formatted (without changing files)
+go fmt -d ./cmd/... ./internal/...
 ```
 
 ## Contributing

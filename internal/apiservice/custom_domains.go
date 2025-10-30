@@ -5,8 +5,8 @@ import (
 	"fmt"
 
 	"connectrpc.com/connect"
+	ssoreadyv1 "github.com/Civia-Inc/ssoready/internal/gen/ssoready/v1"
 	"github.com/cloudflare/cloudflare-go"
-	ssoreadyv1 "github.com/ssoready/ssoready/internal/gen/ssoready/v1"
 )
 
 func (s *Service) GetEnvironmentCustomDomainSettings(ctx context.Context, req *connect.Request[ssoreadyv1.GetEnvironmentCustomDomainSettingsRequest]) (*connect.Response[ssoreadyv1.GetEnvironmentCustomDomainSettingsResponse], error) {

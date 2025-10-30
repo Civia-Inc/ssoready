@@ -19,11 +19,11 @@ import (
 
 	"connectrpc.com/connect"
 
+	"github.com/Civia-Inc/ssoready/internal/emailaddr"
+	"github.com/Civia-Inc/ssoready/internal/saml"
+	"github.com/Civia-Inc/ssoready/internal/statesign"
+	"github.com/Civia-Inc/ssoready/internal/store"
 	"github.com/gorilla/mux"
-	"github.com/ssoready/ssoready/internal/emailaddr"
-	"github.com/ssoready/ssoready/internal/saml"
-	"github.com/ssoready/ssoready/internal/statesign"
-	"github.com/ssoready/ssoready/internal/store"
 )
 
 type acsTemplateData struct {

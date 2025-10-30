@@ -115,3 +115,12 @@ See [DEVELOPMENT.md](./DEVELOPMENT.md) for complete setup instructions, architec
 
 If you have a security issue to report, please contact us at
 security@govai.com.
+
+## Dependencies
+
+https://github.com/Civia-Inc/prettyuuid and https://github.com/Civia-Inc/conf have also been forked from SSOReady.
+
+They are not yet updated, so we are using replace directives (see go.mod):
+
+- The code imports still reference github.com/ssoready/conf and github.com/ssoready/prettyuuid
+- Go automatically redirects these imports to our forked versions at github.com/Civia-Inc/conf and github.com/Civia-Inc/prettyuuid

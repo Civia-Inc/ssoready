@@ -6,9 +6,9 @@ import (
 	"errors"
 
 	"connectrpc.com/connect"
+	"github.com/Civia-Inc/ssoready/internal/authn"
 	"github.com/getsentry/sentry-go"
 	"github.com/google/uuid"
-	"github.com/ssoready/ssoready/internal/authn"
 	"google.golang.org/protobuf/encoding/protojson"
 )
 

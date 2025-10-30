@@ -1,7 +1,7 @@
 package uxml_test
 
 import (
-	"github.com/ssoready/ssoready/internal/saml/uxml"
+	"github.com/Civia-Inc/ssoready/internal/saml/uxml"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

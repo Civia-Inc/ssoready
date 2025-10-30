@@ -10,14 +10,14 @@ import (
 	"time"
 
 	"connectrpc.com/connect"
+	"github.com/Civia-Inc/ssoready/internal/authn"
+	ssoreadyv1 "github.com/Civia-Inc/ssoready/internal/gen/ssoready/v1"
+	"github.com/Civia-Inc/ssoready/internal/saml"
+	"github.com/Civia-Inc/ssoready/internal/store"
+	"github.com/Civia-Inc/ssoready/internal/store/idformat"
 	"github.com/go-jose/go-jose/v4"
 	"github.com/go-jose/go-jose/v4/jwt"
 	"github.com/google/uuid"
-	"github.com/ssoready/ssoready/internal/authn"
-	ssoreadyv1 "github.com/ssoready/ssoready/internal/gen/ssoready/v1"
-	"github.com/ssoready/ssoready/internal/saml"
-	"github.com/ssoready/ssoready/internal/store"
-	"github.com/ssoready/ssoready/internal/store/idformat"
 )
 
 type openidConfig struct {

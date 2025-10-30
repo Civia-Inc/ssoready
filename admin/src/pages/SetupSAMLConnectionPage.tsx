@@ -51,7 +51,6 @@ import { Input } from "@/components/ui/input";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTitle } from "@/useTitle";
 import { Helmet } from "react-helmet";
-import { Fireworks } from "fireworks-js/dist/react";
 
 interface IDP {
   id: string;
