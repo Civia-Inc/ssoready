@@ -114,7 +114,7 @@ See [DEVELOPMENT.md](./DEVELOPMENT.md) for complete setup instructions, architec
 ## Security
 
 If you have a security issue to report, please contact us at
-security@govai.com..
+security@govai.com.
 
 ## Dependencies
 
