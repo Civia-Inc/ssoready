@@ -61,13 +61,14 @@ func SetupTestStore(t *testing.T) *store.Store {
 
 func getTestDBURL() string {
 	// Check for standard test database URL
+	// If not set, return empty string to skip tests (especially important for CI)
 	dbURL := os.Getenv("DATABASE_URL")
 	if dbURL != "" {
 		return dbURL
 	}
 
-	// Fallback for local development
-	// Tries Docker Compose port (5433) first, then standard PostgreSQL port (5432)
-	// Users can override by setting DATABASE_URL explicitly
-	return "postgres://postgres:password@localhost:5433/ssoready_test?sslmode=disable"
+	// No fallback - tests requiring a database will be skipped
+	// For local development, explicitly set DATABASE_URL:
+	//   export DATABASE_URL="postgres://postgres:password@localhost:5433/ssoready_test?sslmode=disable"
+	return ""
 }
