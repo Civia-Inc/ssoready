@@ -264,7 +264,7 @@ func (s *Store) AuthUpsertReceiveAssertionData(ctx context.Context, req *AuthUps
 		}
 
 		if qSAMLFlow.SamlConnectionID != samlConnID {
-			return nil, fmt.Errorf("saml flow id does not match saml connection id")
+			return nil, ErrSAMLConnectionIDMismatch
 		}
 	}
 

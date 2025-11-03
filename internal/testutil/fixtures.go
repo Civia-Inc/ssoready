@@ -448,6 +448,196 @@ func CreateTestSAMLAccessCode(t *testing.T, s *store.Store, samlConn *TestSAMLCo
 	}
 }
 
+// CreateTestSAMLConnectionUnconfigured creates a SAML connection without IdP configuration
+// This is useful for testing unconfigured connection scenarios
+func CreateTestSAMLConnectionUnconfigured(t *testing.T, store *store.Store, org *TestOrganization, isPrimary bool) *TestSAMLConnection {
+	t.Helper()
+	ctx := context.Background()
+
+	samlConnID := uuid.New()
+	authURL := "http://localhost:8081"
+	if org.Environment.AuthURL != nil {
+		authURL = *org.Environment.AuthURL
+	}
+
+	spEntityID := fmt.Sprintf("%s/v1/saml/%s", authURL, idformat.SAMLConnection.Format(samlConnID))
+	spACSUrl := fmt.Sprintf("%s/v1/saml/%s/acs", authURL, idformat.SAMLConnection.Format(samlConnID))
+
+	db := getStoreDB(store)
+	tx, err := db.BeginTx(ctx, pgx.TxOptions{})
+	require.NoError(t, err)
+	defer func() {
+		if err != nil {
+			tx.Rollback(ctx)
+		}
+	}()
+
+	q := queries.New(tx)
+
+	// Create SAML connection WITHOUT IdP configuration (all IdP fields are nil)
+	_, err = q.CreateSAMLConnection(ctx, queries.CreateSAMLConnectionParams{
+		ID:                 samlConnID,
+		OrganizationID:     org.ID,
+		IsPrimary:          isPrimary,
+		SpAcsUrl:           spACSUrl,
+		SpEntityID:         spEntityID,
+		IdpEntityID:        nil, // Not configured
+		IdpRedirectUrl:     nil, // Not configured
+		IdpX509Certificate: nil, // Not configured
+	})
+	require.NoError(t, err)
+
+	if isPrimary {
+		err = q.UpdatePrimarySAMLConnection(ctx, queries.UpdatePrimarySAMLConnectionParams{
+			OrganizationID: org.ID,
+			ID:             samlConnID,
+		})
+		require.NoError(t, err)
+	}
+
+	err = tx.Commit(ctx)
+	require.NoError(t, err)
+
+	return &TestSAMLConnection{
+		ID:             samlConnID,
+		Organization:   org,
+		IDPEntityID:    "", // Empty because not configured
+		IDPRedirectURL: "", // Empty because not configured
+		IDPCertificate: nil, // No certificate
+		SPEntityID:     spEntityID,
+		SPACSUrl:       spACSUrl,
+		IsPrimary:      isPrimary,
+	}
+}
+
+// CreateTestSAMLFlowOAuth creates a SAML flow with OAuth flag set
+// This is used for testing OAuth-style redirect flows
+func CreateTestSAMLFlowOAuth(t *testing.T, store *store.Store, samlConn *TestSAMLConnection, state string) uuid.UUID {
+	t.Helper()
+	ctx := context.Background()
+
+	samlFlowID := uuid.New()
+	isOAuth := true
+	initiateRequest := "<samlp:AuthnRequest>...</samlp:AuthnRequest>"
+	now := time.Now()
+
+	db := getStoreDB(store)
+	tx, err := db.BeginTx(ctx, pgx.TxOptions{})
+	require.NoError(t, err)
+	defer func() {
+		if err != nil {
+			tx.Rollback(ctx)
+		}
+	}()
+
+	q := queries.New(tx)
+
+	_, err = q.UpsertSAMLFlowInitiate(ctx, queries.UpsertSAMLFlowInitiateParams{
+		ID:               samlFlowID,
+		SamlConnectionID: samlConn.ID,
+		ExpireTime:       time.Now().Add(time.Hour),
+		State:            state,
+		CreateTime:       time.Now(),
+		UpdateTime:       time.Now(),
+		InitiateRequest:  &initiateRequest,
+		InitiateTime:     &now,
+		Status:           queries.SamlFlowStatusInProgress,
+		IsOauth:          &isOAuth,
+	})
+	require.NoError(t, err)
+
+	err = tx.Commit(ctx)
+	require.NoError(t, err)
+
+	return samlFlowID
+}
+
+// CreateTestSAMLFlowTestMode creates a SAML flow with TestMode flag set
+// This is used for testing test mode redirect flows
+func CreateTestSAMLFlowTestMode(t *testing.T, store *store.Store, samlConn *TestSAMLConnection, testModeIDP string) uuid.UUID {
+	t.Helper()
+	ctx := context.Background()
+
+	samlFlowID := uuid.New()
+	authRedirectURL := fmt.Sprintf("http://localhost:8081/v1/saml/%s/init", idformat.SAMLConnection.Format(samlConn.ID))
+	now := time.Now()
+
+	db := getStoreDB(store)
+	tx, err := db.BeginTx(ctx, pgx.TxOptions{})
+	require.NoError(t, err)
+	defer func() {
+		if err != nil {
+			tx.Rollback(ctx)
+		}
+	}()
+
+	q := queries.New(tx)
+
+	_, err = q.CreateSAMLFlowGetRedirect(ctx, queries.CreateSAMLFlowGetRedirectParams{
+		ID:                                            samlFlowID,
+		SamlConnectionID:                              samlConn.ID,
+		ExpireTime:                                    time.Now().Add(time.Hour),
+		State:                                         "",
+		CreateTime:                                    time.Now(),
+		UpdateTime:                                    time.Now(),
+		AuthRedirectUrl:                               &authRedirectURL,
+		GetRedirectTime:                               &now,
+		Status:                                        queries.SamlFlowStatusInProgress,
+		TestModeIdp:                                   &testModeIDP,
+		ErrorSamlConnectionNotConfigured:              false,
+		ErrorEnvironmentOauthRedirectUriNotConfigured:  false,
+	})
+	require.NoError(t, err)
+
+	err = tx.Commit(ctx)
+	require.NoError(t, err)
+
+	return samlFlowID
+}
+
+// CreateTestSAMLFlow creates a basic SAML flow for a connection
+// This is used for testing assertion connection mismatch scenarios
+func CreateTestSAMLFlow(t *testing.T, store *store.Store, samlConn *TestSAMLConnection) uuid.UUID {
+	t.Helper()
+	ctx := context.Background()
+
+	samlFlowID := uuid.New()
+	authRedirectURL := fmt.Sprintf("http://localhost:8081/v1/saml/%s/init", idformat.SAMLConnection.Format(samlConn.ID))
+	now := time.Now()
+
+	db := getStoreDB(store)
+	tx, err := db.BeginTx(ctx, pgx.TxOptions{})
+	require.NoError(t, err)
+	defer func() {
+		if err != nil {
+			tx.Rollback(ctx)
+		}
+	}()
+
+	q := queries.New(tx)
+
+	_, err = q.CreateSAMLFlowGetRedirect(ctx, queries.CreateSAMLFlowGetRedirectParams{
+		ID:                                            samlFlowID,
+		SamlConnectionID:                              samlConn.ID,
+		ExpireTime:                                    time.Now().Add(time.Hour),
+		State:                                         "",
+		CreateTime:                                    time.Now(),
+		UpdateTime:                                    time.Now(),
+		AuthRedirectUrl:                               &authRedirectURL,
+		GetRedirectTime:                               &now,
+		Status:                                        queries.SamlFlowStatusInProgress,
+		TestModeIdp:                                   nil,
+		ErrorSamlConnectionNotConfigured:              false,
+		ErrorEnvironmentOauthRedirectUriNotConfigured: false,
+	})
+	require.NoError(t, err)
+
+	err = tx.Commit(ctx)
+	require.NoError(t, err)
+
+	return samlFlowID
+}
+
 // stringPtr returns a pointer to the string
 func stringPtr(s string) *string {
 	return &s
