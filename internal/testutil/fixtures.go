@@ -379,10 +379,10 @@ func CreateTestAPIKey(t *testing.T, s *store.Store, env *TestEnvironment, hasMan
 
 // TestSAMLAccessCode represents a SAML access code for testing
 type TestSAMLAccessCode struct {
-	Code        string // The formatted access code (e.g., "saml_access_code_...")
-	SAMLFlowID  uuid.UUID
-	Email       string
-	State       string
+	Code         string // The formatted access code (e.g., "saml_access_code_...")
+	SAMLFlowID   uuid.UUID
+	Email        string
+	State        string
 	Organization *TestOrganization
 }
 
@@ -501,8 +501,8 @@ func CreateTestSAMLConnectionUnconfigured(t *testing.T, store *store.Store, org 
 	return &TestSAMLConnection{
 		ID:             samlConnID,
 		Organization:   org,
-		IDPEntityID:    "", // Empty because not configured
-		IDPRedirectURL: "", // Empty because not configured
+		IDPEntityID:    "",  // Empty because not configured
+		IDPRedirectURL: "",  // Empty because not configured
 		IDPCertificate: nil, // No certificate
 		SPEntityID:     spEntityID,
 		SPACSUrl:       spACSUrl,
@@ -574,18 +574,18 @@ func CreateTestSAMLFlowTestMode(t *testing.T, store *store.Store, samlConn *Test
 	q := queries.New(tx)
 
 	_, err = q.CreateSAMLFlowGetRedirect(ctx, queries.CreateSAMLFlowGetRedirectParams{
-		ID:                                            samlFlowID,
-		SamlConnectionID:                              samlConn.ID,
-		ExpireTime:                                    time.Now().Add(time.Hour),
-		State:                                         "",
-		CreateTime:                                    time.Now(),
-		UpdateTime:                                    time.Now(),
-		AuthRedirectUrl:                               &authRedirectURL,
-		GetRedirectTime:                               &now,
-		Status:                                        queries.SamlFlowStatusInProgress,
-		TestModeIdp:                                   &testModeIDP,
-		ErrorSamlConnectionNotConfigured:              false,
-		ErrorEnvironmentOauthRedirectUriNotConfigured:  false,
+		ID:                               samlFlowID,
+		SamlConnectionID:                 samlConn.ID,
+		ExpireTime:                       time.Now().Add(time.Hour),
+		State:                            "",
+		CreateTime:                       time.Now(),
+		UpdateTime:                       time.Now(),
+		AuthRedirectUrl:                  &authRedirectURL,
+		GetRedirectTime:                  &now,
+		Status:                           queries.SamlFlowStatusInProgress,
+		TestModeIdp:                      &testModeIDP,
+		ErrorSamlConnectionNotConfigured: false,
+		ErrorEnvironmentOauthRedirectUriNotConfigured: false,
 	})
 	require.NoError(t, err)
 
@@ -617,17 +617,17 @@ func CreateTestSAMLFlow(t *testing.T, store *store.Store, samlConn *TestSAMLConn
 	q := queries.New(tx)
 
 	_, err = q.CreateSAMLFlowGetRedirect(ctx, queries.CreateSAMLFlowGetRedirectParams{
-		ID:                                            samlFlowID,
-		SamlConnectionID:                              samlConn.ID,
-		ExpireTime:                                    time.Now().Add(time.Hour),
-		State:                                         "",
-		CreateTime:                                    time.Now(),
-		UpdateTime:                                    time.Now(),
-		AuthRedirectUrl:                               &authRedirectURL,
-		GetRedirectTime:                               &now,
-		Status:                                        queries.SamlFlowStatusInProgress,
-		TestModeIdp:                                   nil,
-		ErrorSamlConnectionNotConfigured:              false,
+		ID:                               samlFlowID,
+		SamlConnectionID:                 samlConn.ID,
+		ExpireTime:                       time.Now().Add(time.Hour),
+		State:                            "",
+		CreateTime:                       time.Now(),
+		UpdateTime:                       time.Now(),
+		AuthRedirectUrl:                  &authRedirectURL,
+		GetRedirectTime:                  &now,
+		Status:                           queries.SamlFlowStatusInProgress,
+		TestModeIdp:                      nil,
+		ErrorSamlConnectionNotConfigured: false,
 		ErrorEnvironmentOauthRedirectUriNotConfigured: false,
 	})
 	require.NoError(t, err)
