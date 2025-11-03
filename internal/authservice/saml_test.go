@@ -15,13 +15,13 @@ import (
 	"testing"
 
 	"connectrpc.com/connect"
-	ssoreadyv1 "github.com/Civia-Inc/ssoready/internal/gen/ssoready/v1"
 	"github.com/Civia-Inc/ssoready/internal/apiservice"
-	"github.com/Civia-Inc/ssoready/internal/store/idformat"
+	ssoreadyv1 "github.com/Civia-Inc/ssoready/internal/gen/ssoready/v1"
 	"github.com/Civia-Inc/ssoready/internal/statesign"
 	"github.com/Civia-Inc/ssoready/internal/store"
-	"github.com/google/uuid"
+	"github.com/Civia-Inc/ssoready/internal/store/idformat"
 	"github.com/Civia-Inc/ssoready/internal/testutil"
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

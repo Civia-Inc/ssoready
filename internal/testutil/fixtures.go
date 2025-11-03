@@ -48,11 +48,11 @@ type TestAppOrganization struct {
 
 // TestEnvironment represents a test environment
 type TestEnvironment struct {
-	ID              uuid.UUID
-	AppOrgID        uuid.UUID
-	RedirectURL     string
+	ID               uuid.UUID
+	AppOrgID         uuid.UUID
+	RedirectURL      string
 	OAuthRedirectURI *string
-	AuthURL         *string
+	AuthURL          *string
 }
 
 // TestOrganization represents a test organization within an environment
@@ -66,14 +66,14 @@ type TestOrganization struct {
 
 // TestSAMLConnection represents a test SAML connection
 type TestSAMLConnection struct {
-	ID              uuid.UUID
-	Organization    *TestOrganization
-	IDPEntityID     string
-	IDPRedirectURL  string
-	IDPCertificate  []byte
-	SPEntityID      string
-	SPACSUrl        string
-	IsPrimary       bool
+	ID             uuid.UUID
+	Organization   *TestOrganization
+	IDPEntityID    string
+	IDPRedirectURL string
+	IDPCertificate []byte
+	SPEntityID     string
+	SPACSUrl       string
+	IsPrimary      bool
 }
 
 // CreateTestAppOrganization creates a test app organization with an environment
@@ -113,11 +113,11 @@ func CreateTestAppOrganization(t *testing.T, s *store.Store, redirectURL string)
 	return &TestAppOrganization{
 		ID: appOrgID,
 		Environment: &TestEnvironment{
-			ID:              envID,
-			AppOrgID:        appOrgID,
-			RedirectURL:     redirectURL,
+			ID:               envID,
+			AppOrgID:         appOrgID,
+			RedirectURL:      redirectURL,
 			OAuthRedirectURI: &oauthRedirectURI,
-			AuthURL:         stringPtr("http://localhost:8081"),
+			AuthURL:          stringPtr("http://localhost:8081"),
 		},
 	}
 }
@@ -328,10 +328,10 @@ func CreateTestSAMLConnectionWithCertBytes(t *testing.T, store *store.Store, org
 
 // TestAPIKey represents a test API key
 type TestAPIKey struct {
-	ID             uuid.UUID
-	SecretToken    string
-	EnvironmentID  uuid.UUID
-	AppOrgID       uuid.UUID
+	ID               uuid.UUID
+	SecretToken      string
+	EnvironmentID    uuid.UUID
+	AppOrgID         uuid.UUID
 	HasManagementAPI bool
 }
 
@@ -367,10 +367,10 @@ func CreateTestAPIKey(t *testing.T, s *store.Store, env *TestEnvironment, hasMan
 	require.NoError(t, err)
 
 	return &TestAPIKey{
-		ID:              apiKeyID,
-		SecretToken:     idformat.APISecretKey.Format(secretValue),
-		EnvironmentID:   env.ID,
-		AppOrgID:        env.AppOrgID,
+		ID:               apiKeyID,
+		SecretToken:      idformat.APISecretKey.Format(secretValue),
+		EnvironmentID:    env.ID,
+		AppOrgID:         env.AppOrgID,
 		HasManagementAPI: hasManagementAPI,
 	}
 }
