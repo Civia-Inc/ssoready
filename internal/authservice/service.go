@@ -122,6 +122,17 @@ func (s *Service) samlInit(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		if errors.Is(err, store.ErrNoSuchSAMLConnection) {
+			http.Error(w, "saml connection not found", http.StatusNotFound)
+			return
+		}
+
+		var connectErr *connect.Error
+		if errors.As(err, &connectErr) && connectErr.Code() == connect.CodeInvalidArgument {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
 		panic(err)
 	}
 
@@ -168,6 +179,11 @@ func (s *Service) samlAcs(w http.ResponseWriter, r *http.Request) {
 		}
 
 		var connectErr *connect.Error
+		if errors.As(err, &connectErr) && connectErr.Code() == connect.CodeInvalidArgument {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
 		if errors.As(err, &connectErr) && connectErr.Code() == connect.CodeFailedPrecondition {
 			createSAMLLoginRes, err := s.Store.AuthUpsertReceiveAssertionData(ctx, &store.AuthUpsertSAMLLoginEventRequest{
 				SAMLConnectionID:                 samlConnID,
