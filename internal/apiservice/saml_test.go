@@ -77,10 +77,32 @@ func TestGetSAMLRedirectURL_InvalidOrganization(t *testing.T) {
 }
 
 func TestRedeemSAMLAccessCode_ValidCode(t *testing.T) {
-	_ = testutil.SetupTestStore(t)
-	// service := &Service{Store: store}
+	store := testutil.SetupTestStore(t)
+	ctx := context.Background()
 
-	t.Skip("Requires database setup with SAML flow and access code")
+	// Create test data
+	appOrg := testutil.CreateTestAppOrganization(t, store, "http://localhost:3000/callback")
+	org := testutil.CreateTestOrganization(t, store, appOrg.Environment, "test-org-123", []string{"example.com"})
+	samlConn := testutil.CreateTestSAMLConnectionFromMetadata(t, store, org, "okta", true)
+	apiKey := testutil.CreateTestAPIKey(t, store, appOrg.Environment, false)
+
+	// Create a SAML access code (simulating successful assertion processing)
+	accessCode := testutil.CreateTestSAMLAccessCode(t, store, samlConn, "user@example.com", "test-state-123")
+
+	service := &Service{Store: store}
+	ctx = testutil.WithAPIKeyContext(ctx, apiKey)
+
+	req := connect.NewRequest(&ssoreadyv1.RedeemSAMLAccessCodeRequest{
+		SamlAccessCode: accessCode.Code,
+	})
+
+	resp, err := service.RedeemSAMLAccessCode(ctx, req)
+	require.NoError(t, err)
+	assert.Equal(t, accessCode.Email, resp.Msg.Email)
+	assert.Equal(t, accessCode.State, resp.Msg.State)
+	assert.Equal(t, "test-org-123", resp.Msg.OrganizationExternalId)
+	assert.NotEmpty(t, resp.Msg.SamlFlowId)
+	assert.NotNil(t, resp.Msg.Attributes)
 }
 
 func TestRedeemSAMLAccessCode_InvalidCode(t *testing.T) {
@@ -102,10 +124,35 @@ func TestRedeemSAMLAccessCode_InvalidCode(t *testing.T) {
 }
 
 func TestRedeemSAMLAccessCode_AlreadyRedeemed(t *testing.T) {
-	_ = testutil.SetupTestStore(t)
-	// service := &Service{Store: store}
+	store := testutil.SetupTestStore(t)
+	ctx := context.Background()
 
-	t.Skip("Requires database setup with already-redeemed access code")
+	// Create test data
+	appOrg := testutil.CreateTestAppOrganization(t, store, "http://localhost:3000/callback")
+	org := testutil.CreateTestOrganization(t, store, appOrg.Environment, "test-org-123", []string{"example.com"})
+	samlConn := testutil.CreateTestSAMLConnectionFromMetadata(t, store, org, "okta", true)
+	apiKey := testutil.CreateTestAPIKey(t, store, appOrg.Environment, false)
+
+	// Create a SAML access code
+	accessCode := testutil.CreateTestSAMLAccessCode(t, store, samlConn, "user@example.com", "test-state-123")
+
+	service := &Service{Store: store}
+	ctx = testutil.WithAPIKeyContext(ctx, apiKey)
+
+	// First redemption should succeed
+	req := connect.NewRequest(&ssoreadyv1.RedeemSAMLAccessCodeRequest{
+		SamlAccessCode: accessCode.Code,
+	})
+
+	resp, err := service.RedeemSAMLAccessCode(ctx, req)
+	require.NoError(t, err)
+	assert.Equal(t, accessCode.Email, resp.Msg.Email)
+
+	// Second redemption should fail (code already used)
+	_, err = service.RedeemSAMLAccessCode(ctx, req)
+	require.Error(t, err)
+	// The access code should not be found after redemption (it's marked as used)
+	assert.Contains(t, err.Error(), "saml access code not found, or already used")
 }
 
 func TestParseSAMLMetadata_ValidURL(t *testing.T) {

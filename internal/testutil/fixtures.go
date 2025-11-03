@@ -4,10 +4,12 @@ import (
 	"context"
 	"crypto/sha256"
 	"crypto/x509"
+	"encoding/json"
 	"encoding/pem"
 	"fmt"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/Civia-Inc/ssoready/internal/saml"
 	"github.com/Civia-Inc/ssoready/internal/store"
@@ -372,6 +374,77 @@ func CreateTestAPIKey(t *testing.T, s *store.Store, env *TestEnvironment, hasMan
 		EnvironmentID:    env.ID,
 		AppOrgID:         env.AppOrgID,
 		HasManagementAPI: hasManagementAPI,
+	}
+}
+
+// TestSAMLAccessCode represents a SAML access code for testing
+type TestSAMLAccessCode struct {
+	Code        string // The formatted access code (e.g., "saml_access_code_...")
+	SAMLFlowID  uuid.UUID
+	Email       string
+	State       string
+	Organization *TestOrganization
+}
+
+// CreateTestSAMLAccessCode creates a SAML flow with an access code for testing
+// This simulates a successful SAML assertion being processed
+func CreateTestSAMLAccessCode(t *testing.T, s *store.Store, samlConn *TestSAMLConnection, email string, state string) *TestSAMLAccessCode {
+	t.Helper()
+	ctx := context.Background()
+
+	// Generate access code UUID
+	accessCodeUUID := uuid.New()
+	accessCodeSHA := sha256.Sum256(accessCodeUUID[:])
+
+	samlFlowID := uuid.New()
+	now := time.Now()
+	attrs := map[string]string{"email": email}
+	attrsJSON, err := json.Marshal(attrs)
+	require.NoError(t, err)
+
+	db := getStoreDB(s)
+	tx, err := db.BeginTx(ctx, pgx.TxOptions{})
+	require.NoError(t, err)
+	defer func() {
+		if err != nil {
+			tx.Rollback(ctx)
+		}
+	}()
+
+	q := queries.New(tx)
+
+	// Create SAML flow with access code (simulating successful assertion processing)
+	_, err = q.UpsertSAMLFlowReceiveAssertion(ctx, queries.UpsertSAMLFlowReceiveAssertionParams{
+		ID:                   samlFlowID,
+		SamlConnectionID:     samlConn.ID,
+		AccessCodeSha256:     accessCodeSHA[:],
+		ExpireTime:           time.Now().Add(time.Hour),
+		State:                state,
+		CreateTime:           now,
+		UpdateTime:           now,
+		Assertion:            stringPtr("<saml:Assertion>test</saml:Assertion>"),
+		ReceiveAssertionTime: &now,
+		Status:               queries.SamlFlowStatusInProgress,
+	})
+	require.NoError(t, err)
+
+	// Update subject data (email and attributes)
+	_, err = q.UpdateSAMLFlowSubjectData(ctx, queries.UpdateSAMLFlowSubjectDataParams{
+		ID:                   samlFlowID,
+		Email:                &email,
+		SubjectIdpAttributes: attrsJSON,
+	})
+	require.NoError(t, err)
+
+	err = tx.Commit(ctx)
+	require.NoError(t, err)
+
+	return &TestSAMLAccessCode{
+		Code:         idformat.SAMLAccessCode.Format(accessCodeUUID),
+		SAMLFlowID:   samlFlowID,
+		Email:        email,
+		State:        state,
+		Organization: samlConn.Organization,
 	}
 }
 
