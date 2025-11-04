@@ -14,33 +14,36 @@ import (
 )
 
 type Store struct {
-	db                      *pgxpool.Pool
-	q                       *queries.Queries
-	pageEncoder             pagetoken.Encoder
-	defaultAuthURL          string
-	defaultAdminSetupURL    string
-	defaultAdminTestModeURL string
-	statesigner             *statesign.Signer
+	db                       *pgxpool.Pool
+	q                        *queries.Queries
+	pageEncoder              pagetoken.Encoder
+	defaultAuthURL           string
+	defaultAdminSetupURL     string
+	defaultAdminTestModeURL  string
+	statesigner              *statesign.Signer
+	disableNewAppOrgCreation bool
 }
 
 type NewStoreParams struct {
-	DB                      *pgxpool.Pool
-	PageEncoder             pagetoken.Encoder
-	DefaultAuthURL          string
-	DefaultAdminSetupURL    string
-	DefaultAdminTestModeURL string
-	SAMLStateSigningKey     [32]byte
+	DB                       *pgxpool.Pool
+	PageEncoder              pagetoken.Encoder
+	DefaultAuthURL           string
+	DefaultAdminSetupURL     string
+	DefaultAdminTestModeURL  string
+	SAMLStateSigningKey      [32]byte
+	DisableNewAppOrgCreation bool
 }
 
 func New(p NewStoreParams) *Store {
 	return &Store{
-		db:                      p.DB,
-		q:                       queries.New(p.DB),
-		pageEncoder:             p.PageEncoder,
-		defaultAuthURL:          p.DefaultAuthURL,
-		defaultAdminSetupURL:    p.DefaultAdminSetupURL,
-		defaultAdminTestModeURL: p.DefaultAdminTestModeURL,
-		statesigner:             &statesign.Signer{Key: p.SAMLStateSigningKey},
+		db:                       p.DB,
+		q:                        queries.New(p.DB),
+		pageEncoder:              p.PageEncoder,
+		defaultAuthURL:           p.DefaultAuthURL,
+		defaultAdminSetupURL:     p.DefaultAdminSetupURL,
+		defaultAdminTestModeURL:  p.DefaultAdminTestModeURL,
+		statesigner:              &statesign.Signer{Key: p.SAMLStateSigningKey},
+		disableNewAppOrgCreation: p.DisableNewAppOrgCreation,
 	}
 }
 

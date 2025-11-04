@@ -135,6 +135,9 @@ func (s *Store) upsertGoogleAppUser(ctx context.Context, q *queries.Queries, req
 func (s *Store) upsertGoogleAppOrg(ctx context.Context, q *queries.Queries, req *CreateGoogleSessionRequest) (*queries.AppOrganization, error) {
 	if req.HostedDomain == "" {
 		// this is a personal address; give them their own app org
+		if s.disableNewAppOrgCreation {
+			return nil, connect.NewError(connect.CodePermissionDenied, fmt.Errorf("new app organization creation is disabled"))
+		}
 		appOrg, err := q.CreateAppOrganization(ctx, queries.CreateAppOrganizationParams{
 			ID: uuid.New(),
 		})
@@ -148,6 +151,9 @@ func (s *Store) upsertGoogleAppOrg(ctx context.Context, q *queries.Queries, req 
 	appOrg, err := q.GetAppOrganizationByGoogleHostedDomain(ctx, &req.HostedDomain)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
+			if s.disableNewAppOrgCreation {
+				return nil, connect.NewError(connect.CodePermissionDenied, fmt.Errorf("new app organization creation is disabled"))
+			}
 			appOrg, err := q.CreateAppOrganization(ctx, queries.CreateAppOrganizationParams{
 				ID:                 uuid.New(),
 				GoogleHostedDomain: &req.HostedDomain,
@@ -239,6 +245,9 @@ func (s *Store) upsertMicrosoftAppUser(ctx context.Context, q *queries.Queries, 
 func (s *Store) upsertMicrosoftAppOrg(ctx context.Context, q *queries.Queries, req *microsoft.Profile) (*queries.AppOrganization, error) {
 	if req.TenantID == "" {
 		// this is a personal address; give them their own app org
+		if s.disableNewAppOrgCreation {
+			return nil, connect.NewError(connect.CodePermissionDenied, fmt.Errorf("new app organization creation is disabled"))
+		}
 		appOrg, err := q.CreateAppOrganization(ctx, queries.CreateAppOrganizationParams{
 			ID: uuid.New(),
 		})
@@ -252,6 +261,9 @@ func (s *Store) upsertMicrosoftAppOrg(ctx context.Context, q *queries.Queries, r
 	appOrg, err := q.GetAppOrganizationByMicrosoftTenantID(ctx, &req.TenantID)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
+			if s.disableNewAppOrgCreation {
+				return nil, connect.NewError(connect.CodePermissionDenied, fmt.Errorf("new app organization creation is disabled"))
+			}
 			appOrg, err := q.CreateAppOrganization(ctx, queries.CreateAppOrganizationParams{
 				ID:                uuid.New(),
 				MicrosoftTenantID: &req.TenantID,
@@ -387,6 +399,9 @@ func (s *Store) upsertUserByEmailSoleInOrg(ctx context.Context, q *queries.Queri
 	appUser, err := q.GetAppUserByEmail(ctx, email)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
+			if s.disableNewAppOrgCreation {
+				return nil, connect.NewError(connect.CodePermissionDenied, fmt.Errorf("new app organization creation is disabled"))
+			}
 			appOrg, err := q.CreateAppOrganization(ctx, queries.CreateAppOrganizationParams{
 				ID: uuid.New(),
 			})

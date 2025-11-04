@@ -45,6 +45,7 @@ func main() {
 		PageEncodingValue            string `conf:"page-encoding-value"`
 		SAMLStateSigningKey          string `conf:"saml-state-signing-key"`
 		OAuthIDTokenPrivateKeyBase64 string `conf:"oauth-id-token-private-key-base64"`
+		DisableNewAppOrgCreation     bool   `conf:"disable-new-app-org-creation"`
 	}{
 		PageEncodingValue: "0000000000000000000000000000000000000000000000000000000000000000",
 	}
@@ -76,11 +77,12 @@ func main() {
 	}
 
 	store_ := store.New(store.NewStoreParams{
-		DB:                      db,
-		PageEncoder:             pagetoken.Encoder{Secret: pageEncodingValue},
-		DefaultAuthURL:          config.DefaultAuthURL,
-		DefaultAdminTestModeURL: config.DefaultAdminTestModeURL,
-		SAMLStateSigningKey:     samlStateSigningKey,
+		DB:                       db,
+		PageEncoder:              pagetoken.Encoder{Secret: pageEncodingValue},
+		DefaultAuthURL:           config.DefaultAuthURL,
+		DefaultAdminTestModeURL:  config.DefaultAdminTestModeURL,
+		SAMLStateSigningKey:      samlStateSigningKey,
+		DisableNewAppOrgCreation: config.DisableNewAppOrgCreation,
 	})
 
 	idTokenPrivateKey, err := parseRSAPrivateKey(config.OAuthIDTokenPrivateKeyBase64)

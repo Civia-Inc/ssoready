@@ -95,6 +95,10 @@
         {
           "name": "API_ADMIN_LOGOS_S3_BUCKET_NAME",
           "value": "govai-sso-scim-logos"
+        },
+        {
+          "name": "API_DISABLE_NEW_APP_ORG_CREATION",
+          "value": "true"
         }
       ],
       "environmentFiles": [],

@@ -48,12 +48,13 @@ func SetupTestStore(t *testing.T) *store.Store {
 	require.NoError(t, err)
 
 	s := store.New(store.NewStoreParams{
-		DB:                      pool,
-		PageEncoder:             pagetoken.Encoder{Secret: pageEncodingSecret},
-		DefaultAuthURL:          "http://localhost:8081",
-		DefaultAdminSetupURL:    "http://localhost:8082",
-		DefaultAdminTestModeURL: "http://localhost:8082/test",
-		SAMLStateSigningKey:     samlStateSigningKey,
+		DB:                       pool,
+		PageEncoder:              pagetoken.Encoder{Secret: pageEncodingSecret},
+		DefaultAuthURL:           "http://localhost:8081",
+		DefaultAdminSetupURL:     "http://localhost:8082",
+		DefaultAdminTestModeURL:  "http://localhost:8082/test",
+		SAMLStateSigningKey:      samlStateSigningKey,
+		DisableNewAppOrgCreation: false, // Tests should allow org creation by default
 	})
 
 	return s

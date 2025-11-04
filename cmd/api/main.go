@@ -70,6 +70,7 @@ func main() {
 		FlyioAdminProxyAppID                  string `conf:"flyio-adminproxy-app-id,noredact"`
 		FlyioAdminProxyAppCNAMEValue          string `conf:"flyio-adminproxy-app-cname-value,noredact"`
 		AdminLogosS3BucketName                string `conf:"admin-logos-s3-bucket-name,noredact"`
+		DisableNewAppOrgCreation              bool   `conf:"disable-new-app-org-creation"`
 	}{
 		PageEncodingValue: "0000000000000000000000000000000000000000000000000000000000000000",
 	}
@@ -106,11 +107,12 @@ func main() {
 	}
 
 	store_ := store.New(store.NewStoreParams{
-		DB:                   db,
-		PageEncoder:          pagetoken.Encoder{Secret: pageEncodingValue},
-		DefaultAuthURL:       config.DefaultAuthURL,
-		DefaultAdminSetupURL: config.DefaultAdminSetupURL,
-		SAMLStateSigningKey:  samlStateSigningKey,
+		DB:                       db,
+		PageEncoder:              pagetoken.Encoder{Secret: pageEncodingValue},
+		DefaultAuthURL:           config.DefaultAuthURL,
+		DefaultAdminSetupURL:     config.DefaultAdminSetupURL,
+		SAMLStateSigningKey:      samlStateSigningKey,
+		DisableNewAppOrgCreation: config.DisableNewAppOrgCreation,
 	})
 
 	var analyticsClient analytics.Client = appanalytics.NoopClient{}
