@@ -701,6 +701,54 @@ go fmt ./cmd/... ./internal/...
 go fmt -d ./cmd/... ./internal/...
 ```
 
+## Running Tests Locally
+
+This guide explains how to run the Go tests locally, including integration tests that require a database.
+
+### Create a test database
+
+If you're using Docker Compose for development, create a test database:
+
+```bash
+# Start PostgreSQL (if not already running)
+docker compose up -d postgres
+
+# Create test database
+docker compose exec postgres psql -U postgres -c "CREATE DATABASE ssoready_test;"
+
+# Run tests with DATABASE_URL pointing to the test database
+DATABASE_URL="postgres://postgres:password@localhost:5433/ssoready_test?sslmode=disable" go test -v ./...
+```
+
+### Running Specific Tests
+
+#### Run all tests
+```bash
+go test -v ./...
+```
+
+#### Run tests for a specific package
+```bash
+go test -v ./internal/apiservice/...
+go test -v ./internal/authservice/...
+```
+
+#### Run a specific test
+```bash
+go test -v ./internal/apiservice -run TestGetSAMLRedirectURL_HappyPath
+```
+
+#### Run tests with coverage
+```bash
+go test -v -coverprofile=coverage.out ./...
+go tool cover -html=coverage.out -o coverage.html
+```
+
+#### Run tests with race detection
+```bash
+go test -v -race ./...
+```
+
 ## Contributing
 
 When submitting changes:

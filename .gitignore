@@ -16,3 +16,4 @@
 /app/public/index.js.map
 /app/.idea/
 /internal/authservice/templates/node_modules
+*.test

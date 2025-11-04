@@ -55,6 +55,11 @@ func (s *Store) tx(ctx context.Context) (tx pgx.Tx, q *queries.Queries, commit f
 	return tx, queries.New(tx), commit, rollback, nil
 }
 
+// DB returns the underlying database pool (for testing only)
+func (s *Store) DB() *pgxpool.Pool {
+	return s.db
+}
+
 func derefOrEmpty[T any](t *T) T {
 	var z T
 	if t == nil {

@@ -42,11 +42,14 @@ func (e *AuthGetInitDataBadStateError) Error() string {
 func (s *Store) AuthGetInitData(ctx context.Context, req *AuthGetInitDataRequest) (*AuthGetInitDataResponse, error) {
 	samlConnID, err := idformat.SAMLConnection.Parse(req.SAMLConnectionID)
 	if err != nil {
-		return nil, fmt.Errorf("parse saml connection id: %w", err)
+		return nil, connect.NewError(connect.CodeInvalidArgument, fmt.Errorf("parse saml connection id: %w", err))
 	}
 
 	res, err := s.q.AuthGetInitData(ctx, samlConnID)
 	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return nil, ErrNoSuchSAMLConnection
+		}
 		return nil, fmt.Errorf("get init data: %w", err)
 	}
 
@@ -143,7 +146,7 @@ var ErrNoSuchSAMLConnection = errors.New("no such saml connection")
 func (s *Store) AuthGetValidateData(ctx context.Context, req *AuthGetValidateDataRequest) (*AuthGetValidateDataResponse, error) {
 	samlConnID, err := idformat.SAMLConnection.Parse(req.SAMLConnectionID)
 	if err != nil {
-		return nil, err
+		return nil, connect.NewError(connect.CodeInvalidArgument, fmt.Errorf("parse saml connection id: %w", err))
 	}
 
 	_, q, _, rollback, err := s.tx(ctx)
@@ -261,7 +264,7 @@ func (s *Store) AuthUpsertReceiveAssertionData(ctx context.Context, req *AuthUps
 		}
 
 		if qSAMLFlow.SamlConnectionID != samlConnID {
-			return nil, fmt.Errorf("saml flow id does not match saml connection id")
+			return nil, ErrSAMLConnectionIDMismatch
 		}
 	}
 

@@ -42,7 +42,8 @@ jobs:
         run: go mod verify
 
       - name: Run Go tests
-        run: go test -v -race -coverprofile=coverage.out ./...
+        run: go test -v -race -coverprofile=coverage.out -timeout=5m ./...
+        # Note: Tests that require DATABASE_URL will be skipped automatically
 
       - name: Generate coverage report
         run: go tool cover -html=coverage.out -o coverage.html
@@ -157,14 +158,13 @@ jobs:
         env:
           DATABASE_URL: postgres://postgres:password@localhost:5432/ssoready_test?sslmode=disable
         run: |
-          # Add migration command here when ready
-          echo "Integration tests not implemented yet"
+          go run ./cmd/migrate --database "$DATABASE_URL" up
 
-      # Uncomment when integration tests are added:
-      # - name: Run integration tests
-      #   env:
-      #     DATABASE_URL: postgres://postgres:password@localhost:5432/ssoready_test?sslmode=disable
-      #   run: go test -v -tags=integration ./tests/integration/...
+      - name: Run integration tests
+        env:
+          DATABASE_URL: postgres://postgres:password@localhost:5432/ssoready_test?sslmode=disable
+        run: |
+          go test -v -race -timeout=10m ./internal/apiservice/... ./internal/authservice/... ./internal/testutil/...
 
   # Quality Checks
   security-checks:
