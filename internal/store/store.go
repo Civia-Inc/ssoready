@@ -14,24 +14,24 @@ import (
 )
 
 type Store struct {
-	db                        *pgxpool.Pool
-	q                         *queries.Queries
-	pageEncoder               pagetoken.Encoder
-	defaultAuthURL            string
-	defaultAdminSetupURL      string
-	defaultAdminTestModeURL   string
-	statesigner               *statesign.Signer
-	disableNewAppOrgCreation  bool
+	db                       *pgxpool.Pool
+	q                        *queries.Queries
+	pageEncoder              pagetoken.Encoder
+	defaultAuthURL           string
+	defaultAdminSetupURL     string
+	defaultAdminTestModeURL  string
+	statesigner              *statesign.Signer
+	disableNewAppOrgCreation bool
 }
 
 type NewStoreParams struct {
-	DB                        *pgxpool.Pool
-	PageEncoder               pagetoken.Encoder
-	DefaultAuthURL            string
-	DefaultAdminSetupURL      string
-	DefaultAdminTestModeURL   string
-	SAMLStateSigningKey       [32]byte
-	DisableNewAppOrgCreation  bool
+	DB                       *pgxpool.Pool
+	PageEncoder              pagetoken.Encoder
+	DefaultAuthURL           string
+	DefaultAdminSetupURL     string
+	DefaultAdminTestModeURL  string
+	SAMLStateSigningKey      [32]byte
+	DisableNewAppOrgCreation bool
 }
 
 func New(p NewStoreParams) *Store {
