@@ -39,6 +39,10 @@
         {
           "name": "AUTH_BASE_URL",
           "value": "https://identity-auth.govai.com"
+        },
+        {
+          "name": "AUTH_DISABLE_NEW_APP_ORG_CREATION",
+          "value": "true"
         }
       ],
       "environmentFiles": [],
