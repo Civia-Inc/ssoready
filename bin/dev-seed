@@ -26,7 +26,7 @@ APP_ORG_ID=$(uuidgen | tr '[:upper:]' '[:lower:]')
 
 echo "Creating app organization..."
 docker compose exec -T postgres psql -U postgres << EOF
-INSERT INTO app_organizations (id, google_hosted_domain, management_api_enabled)
+INSERT INTO app_organizations (id, google_hosted_domain, entitled_management_api)
 VALUES ('$APP_ORG_ID', 'govai.com', true)
 ON CONFLICT DO NOTHING;
 EOF
