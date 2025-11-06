@@ -25,6 +25,27 @@ docker compose logs -f <service>         # View logs
 docker compose down && rm -rf .postgres  # Nuclear reset
 ```
 
+## Using Local SSOReady with your Local GovAI
+
+In order to fully use the SAML and SCIM flows in local dev, you will need to expose GovAI and the auth endpoint.
+Follow these steps before you start your SSOReady dev instance:
+
+- use expose to expose the ssoready auth end point:
+`expose share localhost:8081 --subdomain=ssoready-auth`
+- update your `.env` file with the following (based on the subdomain above):
+```
+BASE_URL=https://ssoready-auth.us-1.sharedwithexpose.com
+DEFAULT_AUTH_URL=https://ssoready-auth.us-1.sharedwithexpose.com
+```
+- use the setup/seed/start scripts to start ssoready
+- log into the app https://localhost:8082, set up any environments and orgs you want, and create an api key
+- update your GovAI env file with the following:
+```
+SSO_READY_SELF_HOSTED_BASE_URL="http://localhost:8080/v1"
+SSO_READY_SELF_HOSTED_API_KEY="API KEY FROM ABOVE"
+```
+- expose govai with the `share` alias
+
 ## Prerequisites
 
 Before you begin, ensure you have the following installed:
