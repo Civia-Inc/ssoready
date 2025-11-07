@@ -53,6 +53,14 @@ func NewPreAuthentication() connect.UnaryInterceptorFunc {
 							"details": details,
 						})
 					})
+
+					// Skip logging expected client errors to Sentry
+					// These are normal in regular operation and don't need monitoring.
+					switch connectErr.Code() {
+					case connect.CodeNotFound,
+						connect.CodeUnauthenticated:
+						return res, err
+					}
 				}
 
 				sentry.GetHubFromContext(ctx).CaptureException(err)
