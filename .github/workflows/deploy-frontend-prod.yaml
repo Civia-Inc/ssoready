@@ -98,8 +98,8 @@ jobs:
       - name: Build
         env:
           ADMIN_API_URL: https://identity-api.govai.com/internal/connect
-          APP_SENTRY_DSN: https://a3bd611fe5ede0958f2b78e5c8df43be@o4510262139158528.ingest.us.sentry.io/4510262195126272
-          APP_SENTRY_ENVIRONMENT: prod
+          ADMIN_SENTRY_DSN: https://a3bd611fe5ede0958f2b78e5c8df43be@o4510262139158528.ingest.us.sentry.io/4510262195126272
+          ADMIN_SENTRY_ENVIRONMENT: prod
         run: npm run build
 
       - name: Configure AWS credentials

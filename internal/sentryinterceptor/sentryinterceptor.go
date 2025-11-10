@@ -21,9 +21,18 @@ func NewPreAuthentication() connect.UnaryInterceptorFunc {
 
 			res, err := f(ctx, req)
 			if err != nil {
-				// add connectrpc's error details onto Sentry error context
 				var connectErr *connect.Error
 				if errors.As(err, &connectErr) {
+
+					// Skip logging expected client errors to Sentry
+					// These are normal in regular operation and don't need monitoring.
+					switch connectErr.Code() {
+					case connect.CodeNotFound,
+						connect.CodeUnauthenticated:
+						return res, err
+					}
+
+					// add connectrpc's error details onto Sentry error context
 					// this process is a bit of a hack; convert details to json and back
 					var details []any
 					for _, d := range connectErr.Details() {

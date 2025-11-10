@@ -41,7 +41,7 @@ services:
       - API_DEFAULT_ADMIN_SETUP_URL=${DEFAULT_ADMIN_SETUP_URL}
       - API_PAGE_ENCODING_VALUE=${PAGE_ENCODING_VALUE}
       - API_SAML_STATE_SIGNING_KEY=${SAML_STATE_SIGNING_KEY}
-      - API_SENTRY_DSN=${SENTRY_DSN:-}
+      - API_SENTRY_DSN=${API_SENTRY_DSN:-}
       - API_SENTRY_ENVIRONMENT=${SENTRY_ENVIRONMENT:-development}
       - API_GOOGLE_OAUTH_CLIENT_ID=${GOOGLE_OAUTH_CLIENT_ID:-}
       - API_MICROSOFT_OAUTH_CLIENT_ID=${MICROSOFT_OAUTH_CLIENT_ID:-}
@@ -67,7 +67,7 @@ services:
       - AUTH_PAGE_ENCODING_VALUE=${PAGE_ENCODING_VALUE}
       - AUTH_SAML_STATE_SIGNING_KEY=${SAML_STATE_SIGNING_KEY}
       - AUTH_OAUTH_ID_TOKEN_PRIVATE_KEY_BASE64=${OAUTH_ID_TOKEN_PRIVATE_KEY_BASE64}
-      - AUTH_SENTRY_DSN=${SENTRY_DSN:-}
+      - AUTH_SENTRY_DSN=${AUTH_SENTRY_DSN:-}
       - AUTH_SENTRY_ENVIRONMENT=${SENTRY_ENVIRONMENT:-development}
       - AUTH_DISABLE_NEW_APP_ORG_CREATION=${DISABLE_NEW_APP_ORG_CREATION:-false}
 
@@ -83,6 +83,9 @@ services:
       - ./admin/public:/app/public
     depends_on:
       - api
+    environment:
+      - ADMIN_SENTRY_DSN=${ADMIN_SENTRY_DSN:-}
+      - ADMIN_SENTRY_ENVIRONMENT=${SENTRY_ENVIRONMENT:-development}
     command: npm run dev
 
   app:
@@ -97,4 +100,7 @@ services:
       - ./app/public:/app/public
     depends_on:
       - api
+    environment:
+      - APP_SENTRY_DSN=${APP_SENTRY_DSN:-}
+      - APP_SENTRY_ENVIRONMENT=${SENTRY_ENVIRONMENT:-development}
     command: npm run dev
