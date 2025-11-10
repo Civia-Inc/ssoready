@@ -729,8 +729,8 @@ func (s *Store) AdminListSCIMDirectories(ctx context.Context, req *ssoreadyv1.Ad
 	}
 	defer rollback()
 
-	if !authn.FullContextData(ctx).AdminAccessToken.CanManageSAML {
-		return nil, connect.NewError(connect.CodeUnauthenticated, fmt.Errorf("not authorized to manage saml"))
+	if !authn.FullContextData(ctx).AdminAccessToken.CanManageSCIM {
+		return nil, connect.NewError(connect.CodeUnauthenticated, fmt.Errorf("not authorized to manage scim"))
 	}
 
 	orgID := authn.FullContextData(ctx).AdminAccessToken.OrganizationID
