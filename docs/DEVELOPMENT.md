@@ -236,7 +236,7 @@ OAUTH_ID_TOKEN_PRIVATE_KEY_BASE64=LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0t...
 #### Database Configuration
 
 ```bash
-DATABASE_URL=postgres://postgres:password@postgres:5432/postgres?sslmode=disable
+DATABASE_URL=postgres://postgres:password@postgres:5433/postgres?sslmode=disable
 ```
 
 **Important:** The hostname is `postgres` (the Docker service name), not `localhost`. This allows Docker containers to communicate with each other. If you run services outside Docker on your host machine, you would use `localhost` instead.
@@ -726,20 +726,22 @@ go fmt -d ./cmd/... ./internal/...
 
 This guide explains how to run the Go tests locally, including integration tests that require a database.
 
-### Create a test database
+### Running Tests
 
-If you're using Docker Compose for development, create a test database:
+The test infrastructure automatically creates the test database if it doesn't exist, so you don't need to create it manually.
+
+If you're using Docker Compose for development:
 
 ```bash
 # Start PostgreSQL (if not already running)
 docker compose up -d postgres
 
-# Create test database
-docker compose exec postgres psql -U postgres -c "CREATE DATABASE ssoready_test;"
-
 # Run tests with DATABASE_URL pointing to the test database
+# The test database will be created automatically if it doesn't exist
 DATABASE_URL="postgres://postgres:password@localhost:5433/ssoready_test?sslmode=disable" go test -v ./...
 ```
+
+**Note:** If `DATABASE_URL` is not set, integration tests will be skipped gracefully. This is useful for CI environments where you may want to run unit tests without a database.
 
 ### Running Specific Tests
 
