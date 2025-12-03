@@ -6,6 +6,7 @@ import (
 	"log/slog"
 	"net/http"
 	"os"
+	"time"
 
 	"connectrpc.com/connect"
 	"connectrpc.com/vanguard"
@@ -86,9 +87,19 @@ func main() {
 		panic(err)
 	}
 
-	db, err := pgxpool.New(context.Background(), config.DB)
+	poolConfig, err := pgxpool.ParseConfig(config.DB)
 	if err != nil {
-		panic(err)
+		panic(fmt.Errorf("parse db config: %w", err))
+	}
+	poolConfig.MaxConns = 100
+	poolConfig.MinConns = 5
+	poolConfig.MaxConnLifetime = time.Hour
+	poolConfig.MaxConnIdleTime = 30 * time.Minute
+	poolConfig.HealthCheckPeriod = 1 * time.Minute
+
+	db, err := pgxpool.NewWithConfig(context.Background(), poolConfig)
+	if err != nil {
+		panic(fmt.Errorf("create db pool: %w", err))
 	}
 
 	awsSDKConfig, err := awsconfig.LoadDefaultConfig(context.Background())
