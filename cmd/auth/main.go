@@ -12,6 +12,7 @@ import (
 	"log/slog"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/Civia-Inc/ssoready/internal/authservice"
 	"github.com/Civia-Inc/ssoready/internal/hexkey"
@@ -61,9 +62,19 @@ func main() {
 		panic(err)
 	}
 
-	db, err := pgxpool.New(context.Background(), config.DB)
+	poolConfig, err := pgxpool.ParseConfig(config.DB)
 	if err != nil {
-		panic(err)
+		panic(fmt.Errorf("parse db config: %w", err))
+	}
+	poolConfig.MaxConns = 100
+	poolConfig.MinConns = 5
+	poolConfig.MaxConnLifetime = time.Hour
+	poolConfig.MaxConnIdleTime = 30 * time.Minute
+	poolConfig.HealthCheckPeriod = 1 * time.Minute
+
+	db, err := pgxpool.NewWithConfig(context.Background(), poolConfig)
+	if err != nil {
+		panic(fmt.Errorf("create db pool: %w", err))
 	}
 
 	pageEncodingValue, err := hexkey.New(config.PageEncodingValue)
