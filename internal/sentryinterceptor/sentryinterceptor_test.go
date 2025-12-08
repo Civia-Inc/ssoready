@@ -95,7 +95,7 @@ func TestNewPreAuthentication_ExpectedErrorsNotLogged(t *testing.T) {
 			shouldLog: true,
 		},
 		{
-			name:      "CodeInvalidArgument should be logged (not in expected list)",
+			name:      "CodeInvalidArgument should be logged",
 			errorCode: connect.CodeInvalidArgument,
 			shouldLog: true,
 		},
