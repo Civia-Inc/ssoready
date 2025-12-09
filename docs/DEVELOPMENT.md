@@ -772,16 +772,14 @@ go tool cover -html=coverage.out -o coverage.html
 go test -v -race ./...
 ```
 
-## Contributing
+## Debugging
 
-When submitting changes:
+If you want to run queries in the DB based on IDs from urls (e.g. investigating errors in Sentry), you will need to convert them.
 
-1. Test your changes locally
-2. Ensure all services start successfully
-3. Run any relevant tests
-4. Update documentation if needed
-5. Submit a pull request
+url ids will be formatted like `scim_group_ccuapel264jnlae324lf0g0nk`.
 
----
+strip the prefix (`scim_group_` in this case). Then use the following command:
 
-**Happy coding! 🚀**
+`go run ./cmd/idfmt -parse ccuapel264jnlae324lf0g0nk`
+
+You'll get a UUID in the DB format, like `d0b83dc3-baa0-87f8-f8d8-bf98128e5350`

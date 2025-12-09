@@ -203,7 +203,7 @@ func (s *Store) AdminRedeemOneTimeToken(ctx context.Context, req *ssoreadyv1.Adm
 	oneTimeTokenSHA := sha256.Sum256(oneTimeToken[:])
 	adminAccessToken, err := q.AdminGetAdminAccessTokenByOneTimeToken(ctx, oneTimeTokenSHA[:])
 	if err != nil {
-		return nil, fmt.Errorf("get admin access token: %w", err)
+		return nil, connect.NewError(connect.CodeNotFound, fmt.Errorf("one-time token not found or already used"))
 	}
 
 	// generate token as 32-byte random string
