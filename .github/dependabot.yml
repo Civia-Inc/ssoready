@@ -16,7 +16,7 @@ updates:
     ignore:
       - dependency-name: "*"
         update-types:
-          - "major"
+          - "version-update:semver-major"
 
   # Admin app JavaScript dependencies
   - package-ecosystem: "npm"
@@ -33,7 +33,7 @@ updates:
     ignore:
       - dependency-name: "*"
         update-types:
-          - "major"
+          - "version-update:semver-major"
 
   # App JavaScript dependencies
   - package-ecosystem: "npm"
@@ -50,7 +50,7 @@ updates:
     ignore:
       - dependency-name: "*"
         update-types:
-          - "major"
+          - "version-update:semver-major"
 
   # Go modules
   - package-ecosystem: "gomod"
@@ -67,7 +67,7 @@ updates:
     ignore:
       - dependency-name: "*"
         update-types:
-          - "major"
+          - "version-update:semver-major"
 
   # GitHub Actions
   - package-ecosystem: "github-actions"
