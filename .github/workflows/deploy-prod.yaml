@@ -52,7 +52,7 @@ jobs:
           image: ${{ env.ECR_REGISTRY_URL }}/${{ env.SERVICE }}:${{ env.TAG }}
 
       - name: Deploy ECS service
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
         with:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
           service: ${{ env.SERVICE }}
@@ -95,7 +95,7 @@ jobs:
           image: ${{ env.ECR_REGISTRY_URL }}/${{ env.SERVICE }}:${{ env.TAG }}
 
       - name: Deploy ECS service
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
         with:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
           service: ${{ env.SERVICE }}
