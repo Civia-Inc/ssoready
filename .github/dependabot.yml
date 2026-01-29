@@ -21,10 +21,14 @@ updates:
     groups:
       # Group bufbuild/connectrpc packages and their peer dependencies
       bufbuild-connectrpc:
+        applies-to: version-updates
         patterns:
           - "@bufbuild/*"
           - "@connectrpc/*"
           - "@tanstack/react-query"
+        update-types:
+          - "minor"
+          - "patch"
       # Group all other non-major updates together
       minor-and-patch:
         applies-to: version-updates
