@@ -23,7 +23,9 @@ func (t *mockTransport) Configure(options sentry.ClientOptions) {}
 func (t *mockTransport) SendEvent(event *sentry.Event) {
 	t.events = append(t.events, event)
 }
-func (t *mockTransport) Flush(timeout time.Duration) bool { return true }
+func (t *mockTransport) Flush(timeout time.Duration) bool                        { return true }
+func (t *mockTransport) FlushWithContext(ctx context.Context) bool { return true }
+func (t *mockTransport) Close()                                                   {}
 func (t *mockTransport) Events() []*sentry.Event {
 	return t.events
 }
