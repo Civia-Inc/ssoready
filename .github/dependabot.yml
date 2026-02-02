@@ -1,52 +1,44 @@
 version: 2
 updates:
-  # Root JavaScript dependencies
+  # JavaScript dependencies (root, app, admin)
+  # Note the bufbuild/connectrpc packages and their peer dependencies are grouped together
+  # these are cross dependent across directores, you should:
+  #   merge the 3 PRs into one PR
+  #   npm install
+  #   npx buf generate
+  #   cd app && npm run build
+  #   cd ../admin && npm run build
+  #   commit the regenerated app/src/gen/ and admin/src/gen/ files
   - package-ecosystem: "npm"
-    directory: "/"
+    directories:
+      - "/"
+      - "/app"
+      - "/admin"
     schedule:
       interval: "weekly"
       day: "monday"
     open-pull-requests-limit: 10
     groups:
-      # Group all non-major updates together
-      minor-and-patch:
+      # Group bufbuild/connectrpc packages and their peer dependencies
+      bufbuild-connectrpc:
+        applies-to: version-updates
+        patterns:
+          - "@bufbuild/*"
+          - "@connectrpc/*"
+          - "@tanstack/react-query"
         update-types:
           - "minor"
           - "patch"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-
-  # Admin app JavaScript dependencies
-  - package-ecosystem: "npm"
-    directory: "/admin"
-    schedule:
-      interval: "weekly"
-      day: "monday"
-    open-pull-requests-limit: 10
-    groups:
+      # Group all other non-major updates together
       minor-and-patch:
+        applies-to: version-updates
         update-types:
           - "minor"
           - "patch"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-
-  # App JavaScript dependencies
-  - package-ecosystem: "npm"
-    directory: "/app"
-    schedule:
-      interval: "weekly"
-      day: "monday"
-    open-pull-requests-limit: 10
-    groups:
-      minor-and-patch:
-        update-types:
-          - "minor"
-          - "patch"
+        exclude-patterns:
+          - "@bufbuild/*"
+          - "@connectrpc/*"
+          - "@tanstack/react-query"
     ignore:
       - dependency-name: "*"
         update-types:
