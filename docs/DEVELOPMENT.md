@@ -738,7 +738,7 @@ docker compose up -d postgres
 
 # Run tests with DATABASE_URL pointing to the test database
 # The test database will be created automatically if it doesn't exist
-DATABASE_URL="postgres://postgres:password@localhost:5433/ssoready_test?sslmode=disable" go test -v ./...
+CGO_ENABLED=0 DATABASE_URL="postgres://postgres:password@localhost:5433/ssoready_test?sslmode=disable" go test -v ./...
 ```
 
 **Note:** If `DATABASE_URL` is not set, integration tests will be skipped gracefully. This is useful for CI environments where you may want to run unit tests without a database.
