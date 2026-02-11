@@ -23,6 +23,7 @@ docker compose restart <service>         # Quick restart a service
 docker compose ps                        # Check service status
 docker compose logs -f <service>         # View logs
 docker compose down && rm -rf .postgres  # Nuclear reset
+docker system prune -a                   # Removes all unused images, containers, volumes, and networks
 ```
 
 ## Using Local SSOReady with your Local GovAI
