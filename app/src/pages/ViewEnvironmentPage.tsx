@@ -85,10 +85,11 @@ export function ViewEnvironmentPage() {
     hasNextPage,
   } = useInfiniteQuery(
     appListOrganizations,
-    { environmentId, pageToken: "" },
+    { environmentId: environmentId ?? "", pageToken: "" },
     {
       pageParamKey: "pageToken",
-      getNextPageParam: (lastPage) => lastPage.nextPageToken || undefined,
+      getNextPageParam: (lastPage: { nextPageToken?: string }) =>
+        lastPage.nextPageToken || undefined,
     },
   );
 

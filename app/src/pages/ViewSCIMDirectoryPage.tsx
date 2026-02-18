@@ -390,10 +390,11 @@ function UsersTabContent() {
     hasNextPage,
   } = useInfiniteQuery(
     appListSCIMUsers,
-    { scimDirectoryId, pageToken: "" },
+    { scimDirectoryId: scimDirectoryId ?? "", pageToken: "" },
     {
       pageParamKey: "pageToken",
-      getNextPageParam: (lastPage) => lastPage.nextPageToken || undefined,
+      getNextPageParam: (lastPage: { nextPageToken?: string }) =>
+        lastPage.nextPageToken || undefined,
     },
   );
 
@@ -456,10 +457,11 @@ function GroupsTabContent() {
     hasNextPage,
   } = useInfiniteQuery(
     appListSCIMGroups,
-    { scimDirectoryId, pageToken: "" },
+    { scimDirectoryId: scimDirectoryId ?? "", pageToken: "" },
     {
       pageParamKey: "pageToken",
-      getNextPageParam: (lastPage) => lastPage.nextPageToken || undefined,
+      getNextPageParam: (lastPage: { nextPageToken?: string }) =>
+        lastPage.nextPageToken || undefined,
     },
   );
 
@@ -522,10 +524,11 @@ function RequestsCard() {
     hasNextPage,
   } = useInfiniteQuery(
     appListSCIMRequests,
-    { scimDirectoryId, pageToken: "" },
+    { scimDirectoryId: scimDirectoryId ?? "", pageToken: "" },
     {
       pageParamKey: "pageToken",
-      getNextPageParam: (lastPage) => lastPage.nextPageToken || undefined,
+      getNextPageParam: (lastPage: { nextPageToken?: string }) =>
+        lastPage.nextPageToken || undefined,
     },
   );
 
