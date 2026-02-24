@@ -43,7 +43,8 @@ export function HomePage() {
     { pageToken: "" },
     {
       pageParamKey: "pageToken",
-      getNextPageParam: (lastPage) => lastPage.nextPageToken || undefined,
+      getNextPageParam: (lastPage: { nextPageToken?: string }) =>
+        lastPage.nextPageToken || undefined,
     },
   );
   return (

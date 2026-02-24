@@ -79,10 +79,11 @@ function ListAPIKeysCard() {
     hasNextPage,
   } = useInfiniteQuery(
     listAPIKeys,
-    { environmentId, pageToken: "" },
+    { environmentId: environmentId ?? "", pageToken: "" },
     {
       pageParamKey: "pageToken",
-      getNextPageParam: (lastPage) => lastPage.nextPageToken || undefined,
+      getNextPageParam: (lastPage: { nextPageToken?: string }) =>
+        lastPage.nextPageToken || undefined,
     },
   );
 
@@ -327,10 +328,11 @@ function ListOAuthClientsCard() {
     hasNextPage,
   } = useInfiniteQuery(
     listSAMLOAuthClients,
-    { environmentId, pageToken: "" },
+    { environmentId: environmentId ?? "", pageToken: "" },
     {
       pageParamKey: "pageToken",
-      getNextPageParam: (lastPage) => lastPage.nextPageToken || undefined,
+      getNextPageParam: (lastPage: { nextPageToken?: string }) =>
+        lastPage.nextPageToken || undefined,
     },
   );
 

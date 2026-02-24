@@ -52,10 +52,15 @@ export function ViewSCIMGroupPage() {
     hasNextPage,
   } = useInfiniteQuery(
     appListSCIMUsers,
-    { scimDirectoryId, scimGroupId, pageToken: "" },
+    {
+      scimDirectoryId: scimDirectoryId ?? "",
+      scimGroupId: scimGroupId ?? "",
+      pageToken: "",
+    },
     {
       pageParamKey: "pageToken",
-      getNextPageParam: (lastPage) => lastPage.nextPageToken || undefined,
+      getNextPageParam: (lastPage: { nextPageToken?: string }) =>
+        lastPage.nextPageToken || undefined,
     },
   );
 

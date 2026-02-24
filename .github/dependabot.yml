@@ -2,13 +2,14 @@ version: 2
 updates:
   # JavaScript dependencies (root, app, admin)
   # Note the bufbuild/connectrpc packages and their peer dependencies are grouped together
-  # these are cross dependent across directores, you should:
-  #   merge the 3 PRs into one PR
-  #   npm install
+  # these are cross-dependent across directories.
+  # Once the PR is created, you should:
+  #   npm install && (cd app && npm install) && (cd admin && npm install)
   #   npx buf generate
-  #   cd app && npm run build
-  #   cd ../admin && npm run build
-  #   commit the regenerated app/src/gen/ and admin/src/gen/ files
+  #   (cd app && npm run fmt) && (cd admin && npm run fmt)
+  #   go fmt ./internal/...
+  #   then commit the regenerated app/src/gen/, admin/src/gen/, and internal/gen/ files
+  #   test you can build and run the project locally
   - package-ecosystem: "npm"
     directories:
       - "/"
