@@ -15,6 +15,22 @@ source .env
 echo "🌱 Seeding development database..."
 echo ""
 
+echo "Truncating all tables..."
+docker compose exec -T postgres psql -U postgres << 'EOF' > /dev/null
+DO $$
+DECLARE
+    tbl TEXT;
+BEGIN
+    FOR tbl IN
+        SELECT tablename FROM pg_tables
+        WHERE schemaname = 'public' AND tablename != 'schema_migrations'
+    LOOP
+        EXECUTE format('TRUNCATE TABLE %I CASCADE', tbl);
+    END LOOP;
+END $$;
+EOF
+echo ""
+
 # Hardcoded list of development users
 # Add more users here as needed
 declare -a USERS=(
