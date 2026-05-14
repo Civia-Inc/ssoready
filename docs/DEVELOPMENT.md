@@ -56,7 +56,7 @@ Before you begin, ensure you have the following installed:
 - **Node.js 18+**
   - [Install Node.js](https://nodejs.org/) or use [nvm](https://github.com/nvm-sh/nvm)
   - Check version: `node -v`
-- **Go 1.24+**
+- **Go 1.25+**
   - [Install Go](https://golang.org/dl/)
   - Check version: `go version`
 
