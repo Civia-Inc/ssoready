@@ -17,7 +17,7 @@ const context = await esbuild.context({
   minify: !ADMIN_BUILD_IS_DEV,
   bundle: true,
   sourcemap: true,
-  target: ["chrome58", "firefox57", "safari11", "edge18"],
+  target: ["es2022"],
   define,
 });
 
