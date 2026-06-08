@@ -26,7 +26,7 @@ jobs:
       - name: Define environment variables
         run: |
           echo "SERVICE=api" >> $GITHUB_ENV
-          echo "TAG=$(git rev-parse --short ${{ github.sha }})" >> $GITHUB_ENV
+          echo "TAG=$(git rev-parse --short ${{ github.sha }})-${{ github.run_id }}-${{ github.run_attempt }}" >> $GITHUB_ENV
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v6
@@ -69,7 +69,7 @@ jobs:
       - name: Define environment variables
         run: |
           echo "SERVICE=auth" >> $GITHUB_ENV
-          echo "TAG=$(git rev-parse --short ${{ github.sha }})" >> $GITHUB_ENV
+          echo "TAG=$(git rev-parse --short ${{ github.sha }})-${{ github.run_id }}-${{ github.run_attempt }}" >> $GITHUB_ENV
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v6
