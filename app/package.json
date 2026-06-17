@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "build": "npm-run-all config tailwind esbuild",
-    "dev": "dotenv -- sh -c 'npm-run-all -s config tailwind && npm-run-all -p serve tailwind-watch esbuild-watch tsc-watch'",
+    "dev": "dotenv -- sh -c 'npm-run-all -s config tailwind && npm-run-all -l -p serve tailwind-watch esbuild-watch tsc-watch'",
     "build-docker": "npm-run-all tailwind esbuild",
     "serve-docker": "npm run config && ./bin/serve-public",
     "config": "./bin/prepare-config-json > ./public/config.json",
