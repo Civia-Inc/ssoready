@@ -1,44 +1,49 @@
 version: 2
 updates:
-  # Root JavaScript dependencies
+  # JavaScript dependencies (root, app, admin)
+  # Note the bufbuild/connectrpc packages and their peer dependencies are grouped together
+  # these are cross-dependent across directories.
+  # Once the PR is created, you should:
+  #   npm install && (cd app && npm install) && (cd admin && npm install)
+  #   npx buf generate
+  #   (cd app && npm run fmt) && (cd admin && npm run fmt)
+  #   go fmt ./internal/...
+  #   then commit the regenerated app/src/gen/, admin/src/gen/, and internal/gen/ files
+  #   test you can build and run the project locally
   - package-ecosystem: "npm"
-    directory: "/"
+    directories:
+      - "/"
+      - "/app"
+      - "/admin"
     schedule:
       interval: "weekly"
       day: "monday"
     open-pull-requests-limit: 10
     groups:
-      # Group all non-major updates together
-      minor-and-patch:
+      # Group bufbuild/connectrpc packages and their peer dependencies
+      bufbuild-connectrpc:
+        applies-to: version-updates
+        patterns:
+          - "@bufbuild/*"
+          - "@connectrpc/*"
+          - "@tanstack/react-query"
         update-types:
           - "minor"
           - "patch"
-
-  # Admin app JavaScript dependencies
-  - package-ecosystem: "npm"
-    directory: "/admin"
-    schedule:
-      interval: "weekly"
-      day: "monday"
-    open-pull-requests-limit: 10
-    groups:
+      # Group all other non-major updates together
       minor-and-patch:
+        applies-to: version-updates
         update-types:
           - "minor"
           - "patch"
-
-  # App JavaScript dependencies
-  - package-ecosystem: "npm"
-    directory: "/app"
-    schedule:
-      interval: "weekly"
-      day: "monday"
-    open-pull-requests-limit: 10
-    groups:
-      minor-and-patch:
+        exclude-patterns:
+          - "@bufbuild/*"
+          - "@connectrpc/*"
+          - "@tanstack/react-query"
+    ignore:
+      - dependency-name: "*"
         update-types:
-          - "minor"
-          - "patch"
+          - "version-update:semver-major"
 
   # Go modules
   - package-ecosystem: "gomod"
@@ -52,6 +57,10 @@ updates:
         update-types:
           - "minor"
           - "patch"
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-major"
 
   # GitHub Actions
   - package-ecosystem: "github-actions"

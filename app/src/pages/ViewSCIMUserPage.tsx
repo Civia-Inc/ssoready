@@ -53,10 +53,15 @@ export function ViewSCIMUserPage() {
     hasNextPage,
   } = useInfiniteQuery(
     appListSCIMGroups,
-    { scimDirectoryId, scimUserId, pageToken: "" },
+    {
+      scimDirectoryId: scimDirectoryId ?? "",
+      scimUserId: scimUserId ?? "",
+      pageToken: "",
+    },
     {
       pageParamKey: "pageToken",
-      getNextPageParam: (lastPage) => lastPage.nextPageToken || undefined,
+      getNextPageParam: (lastPage: { nextPageToken?: string }) =>
+        lastPage.nextPageToken || undefined,
     },
   );
 

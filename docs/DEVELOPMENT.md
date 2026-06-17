@@ -23,6 +23,7 @@ docker compose restart <service>         # Quick restart a service
 docker compose ps                        # Check service status
 docker compose logs -f <service>         # View logs
 docker compose down && rm -rf .postgres  # Nuclear reset
+docker system prune -a                   # Removes all unused images, containers, volumes, and networks
 ```
 
 ## Using Local SSOReady with your Local GovAI
@@ -55,7 +56,7 @@ Before you begin, ensure you have the following installed:
 - **Node.js 18+**
   - [Install Node.js](https://nodejs.org/) or use [nvm](https://github.com/nvm-sh/nvm)
   - Check version: `node -v`
-- **Go 1.21+**
+- **Go 1.25+**
   - [Install Go](https://golang.org/dl/)
   - Check version: `go version`
 
@@ -755,7 +756,7 @@ docker compose up -d postgres
 
 # Run tests with DATABASE_URL pointing to the test database
 # The test database will be created automatically if it doesn't exist
-DATABASE_URL="postgres://postgres:password@localhost:5433/ssoready_test?sslmode=disable" go test -v ./...
+CGO_ENABLED=0 DATABASE_URL="postgres://postgres:password@localhost:5433/ssoready_test?sslmode=disable" go test -v ./...
 ```
 
 **Note:** If `DATABASE_URL` is not set, integration tests will be skipped gracefully. This is useful for CI environments where you may want to run unit tests without a database.
@@ -789,16 +790,14 @@ go tool cover -html=coverage.out -o coverage.html
 go test -v -race ./...
 ```
 
-## Contributing
+## Debugging
 
-When submitting changes:
+If you want to run queries in the DB based on IDs from urls (e.g. investigating errors in Sentry), you will need to convert them.
 
-1. Test your changes locally
-2. Ensure all services start successfully
-3. Run any relevant tests
-4. Update documentation if needed
-5. Submit a pull request
+url ids will be formatted like `scim_group_ccuapel264jnlae324lf0g0nk`.
 
----
+strip the prefix (`scim_group_` in this case). Then use the following command:
 
-**Happy coding! 🚀**
+`go run ./cmd/idfmt -parse ccuapel264jnlae324lf0g0nk`
+
+You'll get a UUID in the DB format, like `d0b83dc3-baa0-87f8-f8d8-bf98128e5350`

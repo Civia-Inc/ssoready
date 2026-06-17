@@ -95,10 +95,11 @@ export function ViewOrganizationPage() {
     hasNextPage,
   } = useInfiniteQuery(
     appListSAMLConnections,
-    { organizationId, pageToken: "" },
+    { organizationId: organizationId ?? "", pageToken: "" },
     {
       pageParamKey: "pageToken",
-      getNextPageParam: (lastPage) => lastPage.nextPageToken || undefined,
+      getNextPageParam: (lastPage: { nextPageToken?: string }) =>
+        lastPage.nextPageToken || undefined,
     },
   );
 
@@ -585,10 +586,11 @@ function OrganizationSCIMDirectoriesPage() {
     hasNextPage,
   } = useInfiniteQuery(
     appListSCIMDirectories,
-    { organizationId, pageToken: "" },
+    { organizationId: organizationId ?? "", pageToken: "" },
     {
       pageParamKey: "pageToken",
-      getNextPageParam: (lastPage) => lastPage.nextPageToken || undefined,
+      getNextPageParam: (lastPage: { nextPageToken?: string }) =>
+        lastPage.nextPageToken || undefined,
     },
   );
 

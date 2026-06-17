@@ -81,6 +81,7 @@ services:
     volumes:
       - ./admin/src:/app/src
       - ./admin/public:/app/public
+      - ./admin/tsconfig.json:/app/tsconfig.json
     depends_on:
       - api
     environment:
@@ -98,6 +99,7 @@ services:
     volumes:
       - ./app/src:/app/src
       - ./app/public:/app/public
+      - ./app/tsconfig.json:/app/tsconfig.json
     depends_on:
       - api
     environment:

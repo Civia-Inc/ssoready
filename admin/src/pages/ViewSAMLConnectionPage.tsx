@@ -103,10 +103,11 @@ export function ViewSAMLConnectionPage() {
     hasNextPage,
   } = useInfiniteQuery(
     adminListSAMLFlows,
-    { samlConnectionId, pageToken: "" },
+    { samlConnectionId: samlConnectionId ?? "", pageToken: "" },
     {
       pageParamKey: "pageToken",
-      getNextPageParam: (lastPage) => lastPage.nextPageToken || undefined,
+      getNextPageParam: (lastPage: { nextPageToken?: string }) =>
+        lastPage.nextPageToken || undefined,
     },
   );
 
