@@ -476,6 +476,23 @@ docker compose logs -f app
    grep DATABASE_URL .env
    ```
 
+### CSS Not Loading / Missing index.css
+
+If CSS styles aren't loading and `app/public/index.css` or `admin/public/index.css` is missing:
+
+1. **Rebuild the frontend containers** to ensure Tailwind CSS compilation runs:
+   ```bash
+   docker compose up -d --build app admin
+   ```
+
+2. **Check the container logs** to verify Tailwind is running:
+   ```bash
+   docker compose logs app | grep tailwind
+   docker compose logs admin | grep tailwind
+   ```
+
+The `dev` script automatically runs an initial `tailwind` build before starting `tailwind-watch`, so the CSS file should be generated on container startup. If it's still missing after rebuilding, check the container logs for errors.
+
 ### Frontend Not Hot-Reloading
 
 1. **Ensure volumes are mounted correctly in compose.yaml**
