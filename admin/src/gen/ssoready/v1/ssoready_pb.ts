@@ -2293,13 +2293,9 @@ export class ListSCIMGroupsResponse extends Message<ListSCIMGroupsResponse> {
 
   static equals(
     a:
-      | ListSCIMGroupsResponse
-      | PlainMessage<ListSCIMGroupsResponse>
-      | undefined,
+      ListSCIMGroupsResponse | PlainMessage<ListSCIMGroupsResponse> | undefined,
     b:
-      | ListSCIMGroupsResponse
-      | PlainMessage<ListSCIMGroupsResponse>
-      | undefined,
+      ListSCIMGroupsResponse | PlainMessage<ListSCIMGroupsResponse> | undefined,
   ): boolean {
     return proto3.util.equals(ListSCIMGroupsResponse, a, b);
   }
@@ -2585,13 +2581,9 @@ export class GetOrganizationRequest extends Message<GetOrganizationRequest> {
 
   static equals(
     a:
-      | GetOrganizationRequest
-      | PlainMessage<GetOrganizationRequest>
-      | undefined,
+      GetOrganizationRequest | PlainMessage<GetOrganizationRequest> | undefined,
     b:
-      | GetOrganizationRequest
-      | PlainMessage<GetOrganizationRequest>
-      | undefined,
+      GetOrganizationRequest | PlainMessage<GetOrganizationRequest> | undefined,
   ): boolean {
     return proto3.util.equals(GetOrganizationRequest, a, b);
   }
@@ -3018,13 +3010,9 @@ export class CreateSetupURLResponse extends Message<CreateSetupURLResponse> {
 
   static equals(
     a:
-      | CreateSetupURLResponse
-      | PlainMessage<CreateSetupURLResponse>
-      | undefined,
+      CreateSetupURLResponse | PlainMessage<CreateSetupURLResponse> | undefined,
     b:
-      | CreateSetupURLResponse
-      | PlainMessage<CreateSetupURLResponse>
-      | undefined,
+      CreateSetupURLResponse | PlainMessage<CreateSetupURLResponse> | undefined,
   ): boolean {
     return proto3.util.equals(CreateSetupURLResponse, a, b);
   }
@@ -9029,13 +9017,9 @@ export class AppGetSCIMGroupRequest extends Message<AppGetSCIMGroupRequest> {
 
   static equals(
     a:
-      | AppGetSCIMGroupRequest
-      | PlainMessage<AppGetSCIMGroupRequest>
-      | undefined,
+      AppGetSCIMGroupRequest | PlainMessage<AppGetSCIMGroupRequest> | undefined,
     b:
-      | AppGetSCIMGroupRequest
-      | PlainMessage<AppGetSCIMGroupRequest>
-      | undefined,
+      AppGetSCIMGroupRequest | PlainMessage<AppGetSCIMGroupRequest> | undefined,
   ): boolean {
     return proto3.util.equals(AppGetSCIMGroupRequest, a, b);
   }
