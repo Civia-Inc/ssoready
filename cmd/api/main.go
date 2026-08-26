@@ -23,7 +23,6 @@ import (
 	"github.com/Civia-Inc/ssoready/internal/sentryinterceptor"
 	"github.com/Civia-Inc/ssoready/internal/slogcorrelation"
 	"github.com/Civia-Inc/ssoready/internal/store"
-	"github.com/aws/aws-sdk-go-v2/aws"
 	awsconfig "github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/cloudflare/cloudflare-go"
@@ -108,11 +107,6 @@ func main() {
 		panic(err)
 	}
 
-	// aws-sdk-go-v2#3528: default checksum-mode signing breaks browser GET URLs.
-	s3PresignClient := s3.NewPresignClient(s3.NewFromConfig(awsSDKConfig, func(o *s3.Options) {
-		o.ResponseChecksumValidation = aws.ResponseChecksumValidationWhenRequired
-	}))
-
 	pageEncodingValue, err := hexkey.New(config.PageEncodingValue)
 	if err != nil {
 		panic(fmt.Errorf("parse page encoding secret: %w", err))
@@ -177,7 +171,7 @@ func main() {
 			FlyioAdminProxyAppID:                  config.FlyioAdminProxyAppID,
 			FlyioAdminProxyAppCNAMEValue:          config.FlyioAdminProxyAppCNAMEValue,
 			S3Client:                              s3.NewFromConfig(awsSDKConfig),
-			S3PresignClient:                       s3PresignClient,
+			S3PresignClient:                       s3.NewPresignClient(s3.NewFromConfig(awsSDKConfig)),
 			AdminLogosS3BucketName:                config.AdminLogosS3BucketName,
 			UnimplementedSSOReadyServiceHandler:   ssoreadyv1connect.UnimplementedSSOReadyServiceHandler{},
 		},
