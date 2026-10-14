@@ -61,6 +61,11 @@ updates:
       - dependency-name: "*"
         update-types:
           - "version-update:semver-major"
+      # v0.5+ is a Connect v2 rewrite (NewService/NewTranscoder removed).
+      # Stay on 0.4.x until the API server is migrated.
+      - dependency-name: "connectrpc.com/vanguard"
+        versions:
+          - ">= 0.5.0"
 
   # GitHub Actions
   - package-ecosystem: "github-actions"
